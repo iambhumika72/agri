@@ -1,0 +1,160 @@
+# configs/farmer_input_config.yaml
+# ==================================
+# Configuration for the Farmer Input ingestion and preprocessing pipeline.
+# Used by:
+#   - ingestion/farmer_input_ingestion.py
+#   - preprocessing/farmer_input_preprocessor.py
+#   - api/routes/farmer_input.py
+
+# ---------------------------------------------------------------------------
+# Database
+# ---------------------------------------------------------------------------
+database:
+  # For local development, use SQLite (aiosqlite driver).
+  # For production, swap to PostgreSQL:
+  #   url: "postgresql+asyncpg://user:password@host:5432/agri_db"
+  url: "sqlite+aiosqlite:///./agri.db"
+
+  tables:
+    farmer_inputs: "farmer_inputs"
+    failed_inputs: "failed_inputs"
+
+# ---------------------------------------------------------------------------
+# SMS Provider
+# ---------------------------------------------------------------------------
+sms:
+  # Supported: "twilio" | "africas_talking"
+  provider: "twilio"
+
+  twilio:
+    account_sid: "TWILIO_ACCOUNT_SID"         # Overridden by env var
+    auth_token: "TWILIO_AUTH_TOKEN"            # Overridden by env var
+    webhook_secret: "TWILIO_WEBHOOK_SECRET"    # For signature validation
+    phone_number: "+1234567890"                # Your Twilio number
+
+  africas_talking:
+    api_key: "AT_API_KEY"
+    username: "agri_platform"
+    shortcode: "20880"
+    webhook_secret: "AT_WEBHOOK_SECRET"
+
+# ---------------------------------------------------------------------------
+# Supported Crop Types
+# ---------------------------------------------------------------------------
+# These values are used for one-hot encoding and dropdown population.
+crops:
+  - wheat
+  - rice
+  - maize
+  - cotton
+  - sugarcane
+  - soybean
+  - groundnut
+  - millet
+  - sorghum
+  - tomato
+  - potato
+  - onion
+  - chilli
+  - mustard
+  - barley
+
+# ---------------------------------------------------------------------------
+# Supported Issue Types
+# ---------------------------------------------------------------------------
+issues:
+  - pest
+  - disease
+  - drought
+  - flood
+  - other
+
+# ---------------------------------------------------------------------------
+# Village → Coordinates Lookup Table
+# 10 representative Indian villages across major agri states
+# ---------------------------------------------------------------------------
+village_coords:
+  # Uttar Pradesh
+  muzaffarnagar:
+    lat: 29.4727
+    lon: 77.7085
+  baghpat:
+    lat: 28.9457
+    lon: 77.2159
+
+  # Punjab
+  ludhiana:
+    lat: 30.9010
+    lon: 75.8573
+  amritsar:
+    lat: 31.6340
+    lon: 74.8723
+
+  # Maharashtra
+  nashik:
+    lat: 19.9975
+    lon: 73.7898
+  ahmednagar:
+    lat: 19.0952
+    lon: 74.7496
+
+  # Andhra Pradesh
+  guntur:
+    lat: 16.3067
+    lon: 80.4365
+  kurnool:
+    lat: 15.8281
+    lon: 78.0373
+
+  # Karnataka
+  dharwad:
+    lat: 15.4589
+    lon: 75.0078
+  raichur:
+    lat: 16.2120
+    lon: 77.3566
+
+  # Rajasthan
+  barmer:
+    lat: 25.7521
+    lon: 71.3967
+  bikaner:
+    lat: 28.0229
+    lon: 73.3119
+
+  # Madhya Pradesh
+  indore:
+    lat: 22.7196
+    lon: 75.8577
+  ujjain:
+    lat: 23.1765
+    lon: 75.7885
+
+  # West Bengal
+  murshidabad:
+    lat: 24.1800
+    lon: 88.2700
+
+# ---------------------------------------------------------------------------
+# Time-Series Alignment
+# ---------------------------------------------------------------------------
+timeseries:
+  # Pandas frequency alias. "D" = daily, "W" = weekly, "H" = hourly.
+  frequency: "D"
+
+  # When records lack a date_observed, fall back to today minus this offset (days).
+  date_fallback_offset_days: 0
+
+# ---------------------------------------------------------------------------
+# Preprocessing
+# ---------------------------------------------------------------------------
+preprocessing:
+  # Severity → numeric mapping (used in FarmerInputPreprocessor)
+  severity_map:
+    low: 1
+    medium: 2
+    high: 3
+
+  # Null imputation strategy: "zero" | "mean" | "ffill"
+  numeric_null_strategy: "zero"
+  string_null_strategy: "unknown"
