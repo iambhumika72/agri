@@ -1,0 +1,38 @@
+---
+# configs/db_config.yaml
+# Template for Historical Database connection configuration.
+# All sensitive values must be provided via environment variables — never
+# hardcode credentials here.  Reference pattern: ${ENV_VAR_NAME}
+#
+# Load this file in Python with:
+#   import yaml, os
+#   cfg = yaml.safe_load(open("configs/db_config.yaml"))
+#
+# ---------------------------------------------------------------------------
+
+database:
+  host:     ${DB_HOST}        # e.g. localhost or postgres service hostname
+  port:     ${DB_PORT}        # default: 5432
+  name:     ${DB_NAME}        # e.g. trace_agri
+  user:     ${DB_USER}        # e.g. trace_app
+  password: ${DB_PASSWORD}    # injected from .env / secret manager
+
+  # Connection pool settings
+  pool_size:    5
+  max_overflow: 10
+  pool_timeout: 30            # seconds before giving up on a connection
+  pool_recycle: 1800          # seconds before recycling a connection (30 min)
+  pool_pre_ping: true         # health-check connections before use
+
+  # SSL settings (recommended in production)
+  ssl_mode:     prefer        # disable | allow | prefer | require | verify-ca | verify-full
+  ssl_root_cert: ${DB_SSL_CERT_PATH}   # path to CA cert; leave blank to skip
+
+  # Alembic migration settings
+  alembic:
+    script_location: historical_db/migrations
+    version_table:   alembic_version
+
+logging:
+  level: INFO
+  format: "%(asctime)s %(name)s %(levelname)s %(message)s"

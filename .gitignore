@@ -1,6 +1,6 @@
 # ==============================================================
-# KrishiAI — .gitignore
-# Python 3.11+  |  FastAPI / APScheduler / Redis / pytest
+# Trace Agricultural AI System — .gitignore
+# Python 3.11+ | FastAPI | LangGraph | PostgreSQL | pytest
 # ==============================================================
 
 # ── Virtual Environments ──────────────────────────────────────
@@ -17,11 +17,12 @@ ENV/
 *.pem
 *.key
 
-# ── Python Cache ──────────────────────────────────────────────
+# ── Python Cache / Metadata ───────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
 *.pyo
+.gemini/
 
 # ── Distribution / Build ──────────────────────────────────────
 dist/
@@ -50,14 +51,38 @@ pyrightconfig.json
 .ipynb_checkpoints/
 *.ipynb
 
-# ── Redis ────────────────────────────────────────────────────
+# ── Databases / Storage ──────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
 dump.rdb
 *.rdb
 appendonly.aof
+docker/data/
+
+# ── ML Models / Data ─────────────────────────────────────────
+model_weights/
+*.pth
+*.h5
+*.pkl
+*.pb
+*.onnx
+data/
+!data/.gitkeep
 
 # ── Logs ─────────────────────────────────────────────────────
 *.log
 logs/
+
+# ── Frontend / Web ───────────────────────────────────────────
+node_modules/
+.next/
+.nuxt/
+.vercel/
+.npm
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
 # ── IDE / Editor ─────────────────────────────────────────────
 .vscode/
@@ -66,8 +91,8 @@ logs/
 *.swo
 *~
 .DS_Store
-Thumbs.db
 
 # ── OS ───────────────────────────────────────────────────────
+Thumbs.db
 ehthumbs.db
 desktop.ini

@@ -1,1 +1,31 @@
-ÿþ
+# Trace Agricultural AI System â€” requirements.txt
+# Core runtime dependencies
+
+# --- Web framework ---
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+
+# --- Database ---
+sqlalchemy>=2.0
+psycopg2-binary>=2.9
+alembic>=1.13
+
+# --- Data processing ---
+pandas>=2.2
+numpy>=1.26
+
+# --- Validation ---
+pydantic>=2.0
+python-dotenv>=1.0
+
+# --- AI / LangGraph orchestration ---
+langgraph>=0.1.0
+langchain>=0.2.0
+
+# --- Testing ---
+pytest>=8.0
+httpx>=0.27
+pytest-asyncio>=0.23
+
+# --- Utilities ---
+pyyaml>=6.0
