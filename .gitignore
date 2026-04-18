@@ -48,7 +48,7 @@ pyrightconfig.json
 
 # ── Jupyter / IPython ────────────────────────────────────────
 .ipynb_checkpoints/
-*.ipynb
+# *.ipynb  <-- Removed to track development notebooks
 
 # ── Redis ────────────────────────────────────────────────────
 dump.rdb
@@ -58,6 +58,30 @@ appendonly.aof
 # ── Logs ─────────────────────────────────────────────────────
 *.log
 logs/
+
+# ── Data & Satellite Imagery ──────────────────────────────────
+data/raw/
+data/processed/
+data/satellite_tiles/
+!data/sample/
+
+# ── ML Models & Artifacts ─────────────────────────────────────
+mlruns/
+models/**/*.h5
+models/**/*.pth
+models/**/*.bin
+models/**/*.pt
+models/**/*.onnx
+models/**/*.tflite
+artifacts/
+.dvc/config.local
+
+# ── Frontend (React/Vite) ─────────────────────────────────────
+node_modules/
+frontend/dashboard/dist/
+frontend/dashboard/build/
+.eslintcache
+*.tsbuildinfo
 
 # ── IDE / Editor ─────────────────────────────────────────────
 .vscode/
