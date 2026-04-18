@@ -76,12 +76,25 @@ models/**/*.tflite
 artifacts/
 .dvc/config.local
 
-# ── Frontend (React/Vite) ─────────────────────────────────────
+# ── Frontend (React/Vite/Next.js) ──────────────────────────────
 node_modules/
 frontend/dashboard/dist/
 frontend/dashboard/build/
+.next/
+.nuxt/
+.vercel/
+.npm
 .eslintcache
 *.tsbuildinfo
+# package-lock.json (Best practice to commit this for consistent builds)
+yarn.lock
+pnpm-lock.yaml
+
+# ── Agri Project Specifics ──────────────────────────────────
+agri.db
+agri.db-journal
+test_outputs/
+.python-version
 
 # ── IDE / Editor ─────────────────────────────────────────────
 .vscode/
