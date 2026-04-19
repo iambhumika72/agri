@@ -1,0 +1,127 @@
+{
+  "farm-001": {
+    "daily": [
+      { "date": "2025-10-06", "day": "Mon", "wmo_code": 1, "condition": "Mainly Clear", "temp_max": 31, "temp_min": 22, "precip_mm": 0, "wind_kmh": 14, "et0_mm": 5.2, "soil_moisture_avg": 67, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-07", "day": "Tue", "wmo_code": 2, "condition": "Partly Cloudy", "temp_max": 29, "temp_min": 21, "precip_mm": 4, "wind_kmh": 18, "et0_mm": 4.1, "soil_moisture_avg": 71, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-08", "day": "Wed", "wmo_code": 61, "condition": "Slight Rain", "temp_max": 27, "temp_min": 20, "precip_mm": 12, "wind_kmh": 22, "et0_mm": 3.2, "soil_moisture_avg": 78, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-09", "day": "Thu", "wmo_code": 3, "condition": "Overcast", "temp_max": 28, "temp_min": 21, "precip_mm": 2, "wind_kmh": 12, "et0_mm": 3.8, "soil_moisture_avg": 74, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-10", "day": "Fri", "wmo_code": 0, "condition": "Clear Sky", "temp_max": 33, "temp_min": 23, "precip_mm": 0, "wind_kmh": 10, "et0_mm": 5.8, "soil_moisture_avg": 69, "frost_risk": false, "heat_stress": true, "season": "Kharif" },
+      { "date": "2025-10-11", "day": "Sat", "wmo_code": 1, "condition": "Mainly Clear", "temp_max": 32, "temp_min": 23, "precip_mm": 0, "wind_kmh": 9, "et0_mm": 5.5, "soil_moisture_avg": 64, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-12", "day": "Sun", "wmo_code": 80, "condition": "Rain Showers", "temp_max": 26, "temp_min": 19, "precip_mm": 22, "wind_kmh": 26, "et0_mm": 2.9, "soil_moisture_avg": 80, "frost_risk": false, "heat_stress": false, "season": "Kharif" }
+    ],
+    "hourly_soil_moisture": [
+      { "hour": "00:00", "moisture": 69 },
+      { "hour": "02:00", "moisture": 68 },
+      { "hour": "04:00", "moisture": 67 },
+      { "hour": "06:00", "moisture": 66 },
+      { "hour": "08:00", "moisture": 64 },
+      { "hour": "10:00", "moisture": 62 },
+      { "hour": "12:00", "moisture": 59 },
+      { "hour": "14:00", "moisture": 57 },
+      { "hour": "16:00", "moisture": 56 },
+      { "hour": "18:00", "moisture": 57 },
+      { "hour": "20:00", "moisture": 59 },
+      { "hour": "22:00", "moisture": 61 }
+    ]
+  },
+  "farm-002": {
+    "daily": [
+      { "date": "2025-10-06", "day": "Mon", "wmo_code": 0, "condition": "Clear Sky", "temp_max": 36, "temp_min": 24, "precip_mm": 0, "wind_kmh": 8, "et0_mm": 6.8, "soil_moisture_avg": 41, "frost_risk": false, "heat_stress": true, "season": "Rabi" },
+      { "date": "2025-10-07", "day": "Tue", "wmo_code": 1, "condition": "Mainly Clear", "temp_max": 35, "temp_min": 23, "precip_mm": 0, "wind_kmh": 11, "et0_mm": 6.3, "soil_moisture_avg": 38, "frost_risk": false, "heat_stress": true, "season": "Rabi" },
+      { "date": "2025-10-08", "day": "Wed", "wmo_code": 2, "condition": "Partly Cloudy", "temp_max": 33, "temp_min": 23, "precip_mm": 0, "wind_kmh": 14, "et0_mm": 5.7, "soil_moisture_avg": 36, "frost_risk": false, "heat_stress": false, "season": "Rabi" },
+      { "date": "2025-10-09", "day": "Thu", "wmo_code": 1, "condition": "Mainly Clear", "temp_max": 37, "temp_min": 25, "precip_mm": 0, "wind_kmh": 9, "et0_mm": 7.1, "soil_moisture_avg": 33, "frost_risk": false, "heat_stress": true, "season": "Rabi" },
+      { "date": "2025-10-10", "day": "Fri", "wmo_code": 95, "condition": "Thunderstorm", "temp_max": 28, "temp_min": 22, "precip_mm": 34, "wind_kmh": 38, "et0_mm": 2.1, "soil_moisture_avg": 52, "frost_risk": false, "heat_stress": false, "season": "Rabi" },
+      { "date": "2025-10-11", "day": "Sat", "wmo_code": 80, "condition": "Rain Showers", "temp_max": 30, "temp_min": 22, "precip_mm": 8, "wind_kmh": 20, "et0_mm": 3.5, "soil_moisture_avg": 58, "frost_risk": false, "heat_stress": false, "season": "Rabi" },
+      { "date": "2025-10-12", "day": "Sun", "wmo_code": 1, "condition": "Mainly Clear", "temp_max": 34, "temp_min": 23, "precip_mm": 0, "wind_kmh": 12, "et0_mm": 6.0, "soil_moisture_avg": 50, "frost_risk": false, "heat_stress": false, "season": "Rabi" }
+    ],
+    "hourly_soil_moisture": [
+      { "hour": "00:00", "moisture": 43 },
+      { "hour": "02:00", "moisture": 42 },
+      { "hour": "04:00", "moisture": 41 },
+      { "hour": "06:00", "moisture": 40 },
+      { "hour": "08:00", "moisture": 38 },
+      { "hour": "10:00", "moisture": 36 },
+      { "hour": "12:00", "moisture": 34 },
+      { "hour": "14:00", "moisture": 32 },
+      { "hour": "16:00", "moisture": 31 },
+      { "hour": "18:00", "moisture": 32 },
+      { "hour": "20:00", "moisture": 34 },
+      { "hour": "22:00", "moisture": 36 }
+    ]
+  },
+  "farm-003": {
+    "daily": [
+      { "date": "2025-10-06", "day": "Mon", "wmo_code": 80, "condition": "Rain Showers", "temp_max": 28, "temp_min": 20, "precip_mm": 16, "wind_kmh": 20, "et0_mm": 3.4, "soil_moisture_avg": 79, "frost_risk": false, "heat_stress": false, "season": "Zaid" },
+      { "date": "2025-10-07", "day": "Tue", "wmo_code": 3, "condition": "Overcast", "temp_max": 26, "temp_min": 19, "precip_mm": 6, "wind_kmh": 16, "et0_mm": 2.9, "soil_moisture_avg": 82, "frost_risk": false, "heat_stress": false, "season": "Zaid" },
+      { "date": "2025-10-08", "day": "Wed", "wmo_code": 2, "condition": "Partly Cloudy", "temp_max": 27, "temp_min": 19, "precip_mm": 1, "wind_kmh": 14, "et0_mm": 3.5, "soil_moisture_avg": 80, "frost_risk": false, "heat_stress": false, "season": "Zaid" },
+      { "date": "2025-10-09", "day": "Thu", "wmo_code": 1, "condition": "Mainly Clear", "temp_max": 29, "temp_min": 20, "precip_mm": 0, "wind_kmh": 11, "et0_mm": 4.1, "soil_moisture_avg": 76, "frost_risk": false, "heat_stress": false, "season": "Zaid" },
+      { "date": "2025-10-10", "day": "Fri", "wmo_code": 0, "condition": "Clear Sky", "temp_max": 31, "temp_min": 21, "precip_mm": 0, "wind_kmh": 9, "et0_mm": 4.8, "soil_moisture_avg": 72, "frost_risk": false, "heat_stress": false, "season": "Zaid" },
+      { "date": "2025-10-11", "day": "Sat", "wmo_code": 61, "condition": "Slight Rain", "temp_max": 25, "temp_min": 18, "precip_mm": 9, "wind_kmh": 18, "et0_mm": 2.7, "soil_moisture_avg": 78, "frost_risk": false, "heat_stress": false, "season": "Zaid" },
+      { "date": "2025-10-12", "day": "Sun", "wmo_code": 2, "condition": "Partly Cloudy", "temp_max": 27, "temp_min": 19, "precip_mm": 3, "wind_kmh": 13, "et0_mm": 3.2, "soil_moisture_avg": 77, "frost_risk": false, "heat_stress": false, "season": "Zaid" }
+    ],
+    "hourly_soil_moisture": [
+      { "hour": "00:00", "moisture": 80 },
+      { "hour": "02:00", "moisture": 79 },
+      { "hour": "04:00", "moisture": 78 },
+      { "hour": "06:00", "moisture": 78 },
+      { "hour": "08:00", "moisture": 77 },
+      { "hour": "10:00", "moisture": 75 },
+      { "hour": "12:00", "moisture": 74 },
+      { "hour": "14:00", "moisture": 73 },
+      { "hour": "16:00", "moisture": 73 },
+      { "hour": "18:00", "moisture": 74 },
+      { "hour": "20:00", "moisture": 76 },
+      { "hour": "22:00", "moisture": 78 }
+    ]
+  },
+  "farm-004": {
+    "daily": [
+      { "date": "2025-10-06", "day": "Mon", "wmo_code": 0, "condition": "Clear Sky", "temp_max": 39, "temp_min": 26, "precip_mm": 0, "wind_kmh": 6, "et0_mm": 8.1, "soil_moisture_avg": 22, "frost_risk": false, "heat_stress": true, "season": "Kharif" },
+      { "date": "2025-10-07", "day": "Tue", "wmo_code": 0, "condition": "Clear Sky", "temp_max": 40, "temp_min": 27, "precip_mm": 0, "wind_kmh": 5, "et0_mm": 8.4, "soil_moisture_avg": 19, "frost_risk": false, "heat_stress": true, "season": "Kharif" },
+      { "date": "2025-10-08", "day": "Wed", "wmo_code": 1, "condition": "Mainly Clear", "temp_max": 38, "temp_min": 25, "precip_mm": 0, "wind_kmh": 8, "et0_mm": 7.7, "soil_moisture_avg": 17, "frost_risk": false, "heat_stress": true, "season": "Kharif" },
+      { "date": "2025-10-09", "day": "Thu", "wmo_code": 2, "condition": "Partly Cloudy", "temp_max": 36, "temp_min": 25, "precip_mm": 0, "wind_kmh": 12, "et0_mm": 6.9, "soil_moisture_avg": 15, "frost_risk": false, "heat_stress": true, "season": "Kharif" },
+      { "date": "2025-10-10", "day": "Fri", "wmo_code": 95, "condition": "Thunderstorm", "temp_max": 30, "temp_min": 22, "precip_mm": 28, "wind_kmh": 42, "et0_mm": 2.8, "soil_moisture_avg": 34, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-11", "day": "Sat", "wmo_code": 1, "condition": "Mainly Clear", "temp_max": 35, "temp_min": 24, "precip_mm": 0, "wind_kmh": 10, "et0_mm": 6.5, "soil_moisture_avg": 30, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-12", "day": "Sun", "wmo_code": 0, "condition": "Clear Sky", "temp_max": 38, "temp_min": 26, "precip_mm": 0, "wind_kmh": 7, "et0_mm": 7.8, "soil_moisture_avg": 24, "frost_risk": false, "heat_stress": true, "season": "Kharif" }
+    ],
+    "hourly_soil_moisture": [
+      { "hour": "00:00", "moisture": 24 },
+      { "hour": "02:00", "moisture": 23 },
+      { "hour": "04:00", "moisture": 22 },
+      { "hour": "06:00", "moisture": 22 },
+      { "hour": "08:00", "moisture": 20 },
+      { "hour": "10:00", "moisture": 19 },
+      { "hour": "12:00", "moisture": 17 },
+      { "hour": "14:00", "moisture": 15 },
+      { "hour": "16:00", "moisture": 14 },
+      { "hour": "18:00", "moisture": 15 },
+      { "hour": "20:00", "moisture": 17 },
+      { "hour": "22:00", "moisture": 19 }
+    ]
+  },
+  "farm-005": {
+    "daily": [
+      { "date": "2025-10-06", "day": "Mon", "wmo_code": 2, "condition": "Partly Cloudy", "temp_max": 34, "temp_min": 23, "precip_mm": 0, "wind_kmh": 16, "et0_mm": 5.9, "soil_moisture_avg": 55, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-07", "day": "Tue", "wmo_code": 80, "condition": "Rain Showers", "temp_max": 29, "temp_min": 21, "precip_mm": 11, "wind_kmh": 24, "et0_mm": 3.8, "soil_moisture_avg": 62, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-08", "day": "Wed", "wmo_code": 3, "condition": "Overcast", "temp_max": 27, "temp_min": 20, "precip_mm": 5, "wind_kmh": 19, "et0_mm": 3.2, "soil_moisture_avg": 65, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-09", "day": "Thu", "wmo_code": 1, "condition": "Mainly Clear", "temp_max": 31, "temp_min": 22, "precip_mm": 0, "wind_kmh": 14, "et0_mm": 5.1, "soil_moisture_avg": 61, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-10", "day": "Fri", "wmo_code": 0, "condition": "Clear Sky", "temp_max": 35, "temp_min": 24, "precip_mm": 0, "wind_kmh": 11, "et0_mm": 6.2, "soil_moisture_avg": 56, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-11", "day": "Sat", "wmo_code": 61, "condition": "Slight Rain", "temp_max": 26, "temp_min": 19, "precip_mm": 7, "wind_kmh": 21, "et0_mm": 3.0, "soil_moisture_avg": 60, "frost_risk": false, "heat_stress": false, "season": "Kharif" },
+      { "date": "2025-10-12", "day": "Sun", "wmo_code": 2, "condition": "Partly Cloudy", "temp_max": 30, "temp_min": 21, "precip_mm": 2, "wind_kmh": 15, "et0_mm": 4.5, "soil_moisture_avg": 58, "frost_risk": false, "heat_stress": false, "season": "Kharif" }
+    ],
+    "hourly_soil_moisture": [
+      { "hour": "00:00", "moisture": 57 },
+      { "hour": "02:00", "moisture": 56 },
+      { "hour": "04:00", "moisture": 55 },
+      { "hour": "06:00", "moisture": 55 },
+      { "hour": "08:00", "moisture": 53 },
+      { "hour": "10:00", "moisture": 51 },
+      { "hour": "12:00", "moisture": 49 },
+      { "hour": "14:00", "moisture": 47 },
+      { "hour": "16:00", "moisture": 48 },
+      { "hour": "18:00", "moisture": 50 },
+      { "hour": "20:00", "moisture": 52 },
+      { "hour": "22:00", "moisture": 54 }
+    ]
+  }
+}

@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Animation keyframes ─────────────────────────────────────────── */
+@keyframes slideInUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes slideInRight {
+  from { transform: translateX(40px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-20px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59,109,17,0.3); }
+  50%       { box-shadow: 0 0 0 6px rgba(59,109,17,0); }
+}
+@keyframes shimmer {
+  from { background-position: -400px 0; }
+  to   { background-position:  400px 0; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    @apply font-sans text-neutral-800 bg-neutral-50 antialiased;
+    margin: 0;
+    padding: 0;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  .btn-secondary {
+    @apply bg-white border border-neutral-200 hover:bg-neutral-50 text-neutral-700 font-medium px-4 py-2 rounded-lg text-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2;
+  }
+  .btn-danger {
+    @apply bg-danger-500 hover:bg-danger-600 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors duration-150;
+  }
+  .btn-teal {
+    @apply bg-teal-400 hover:bg-teal-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors duration-150;
+  }
+  .card {
+    @apply bg-white border border-neutral-100 rounded-xl p-5;
+  }
+  .input {
+    @apply border border-neutral-200 rounded-lg px-3 py-2 text-sm text-neutral-800 bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent w-full;
+  }
+  .select {
+    @apply border border-neutral-200 rounded-lg px-3 py-2 text-sm text-neutral-800 bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+  .tab-active {
+    @apply border-b-2 border-primary-500 text-primary-600 font-medium;
+  }
+  .tab-inactive {
+    @apply text-neutral-500 hover:text-neutral-700 border-b-2 border-transparent;
+  }
+  .badge-info {
+    @apply bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full;
+  }
+  .badge-warning {
+    @apply bg-amber-100 text-amber-700 text-xs font-medium px-2 py-0.5 rounded-full;
+  }
+  .badge-critical {
+    @apply bg-danger-100 text-danger-600 text-xs font-medium px-2 py-0.5 rounded-full;
+  }
+  .badge-success {
+    @apply bg-green-100 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full;
+  }
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:bg-neutral-800 hover:text-white transition-colors duration-150 cursor-pointer;
+  }
+  .sidebar-link-active {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium bg-primary-600 text-white;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #D8D8D6 transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #D8D8D6;
+    border-radius: 4px;
+  }
+  /* Skeleton shimmer */
+  .skeleton {
+    background: linear-gradient(90deg, #EEEEED 25%, #F9F9F7 50%, #EEEEED 75%);
+    background-size: 400px 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+  /* Animation helpers */
+  .animate-slide-up    { animation: slideInUp    400ms ease-out both; }
+  .animate-slide-right { animation: slideInRight 400ms ease-out both; }
+  .animate-slide-left  { animation: slideInLeft  400ms ease-out both; }
+  .animate-fade-in     { animation: fadeIn       300ms ease-out both; }
+  .animate-pulse-ring  { animation: pulse-ring   2s infinite; }
+}

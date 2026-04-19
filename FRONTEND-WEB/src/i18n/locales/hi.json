@@ -1,0 +1,85 @@
+{
+  "nav": {
+    "dashboard": "डैशबोर्ड",
+    "farms": "खेत",
+    "weather": "मौसम",
+    "insights": "AI अंतर्दृष्टि",
+    "alerts": "अलर्ट और SMS"
+  },
+  "dashboard": {
+    "title": "डैशबोर्ड",
+    "subtitle": "सभी प्रबंधित खेतों का अवलोकन",
+    "activeFarms": "सक्रिय खेत",
+    "avgMoisture": "औसत मिट्टी नमी",
+    "alertsToday": "आज के अलर्ट",
+    "nextIrrigation": "अगली सिंचाई",
+    "yieldForecast": "7-दिन उपज पूर्वानुमान",
+    "soilMoisture": "खेत के अनुसार मिट्टी नमी",
+    "weatherForecast": "7-दिन मौसम पूर्वानुमान",
+    "recentAlerts": "हाल के अलर्ट",
+    "viewAll": "सभी देखें →",
+    "noAlerts": "आज कोई अलर्ट नहीं। सभी खेत सामान्य चल रहे हैं।"
+  },
+  "farms": {
+    "title": "सभी खेत",
+    "subtitle": "विस्तृत विश्लेषण देखने के लिए किसी खेत पर क्लिक करें",
+    "noFarms": "अभी कोई खेत पंजीकृत नहीं है।"
+  },
+  "weather": {
+    "title": "मौसम पूर्वानुमान",
+    "subtitle": "कृषि जोखिम संकेतकों के साथ 7-दिन का पूर्वानुमान",
+    "selectFarm": "खेत चुनें"
+  },
+  "insights": {
+    "title": "AI अंतर्दृष्टि",
+    "subtitle": "Vision, Forecaster और LLM मॉड्यूल से सिफारिशें",
+    "filterAll": "सभी",
+    "noInsights": "चुने गए फ़िल्टर के लिए कोई अंतर्दृष्टि नहीं मिली।",
+    "sendSMS": "SMS भेजें"
+  },
+  "alerts": {
+    "title": "अलर्ट और SMS",
+    "subtitle": "अलर्ट मॉनिटर करें और किसानों को SMS भेजें",
+    "sentToday": "आज भेजे गए",
+    "delivered": "वितरित",
+    "failed": "विफल",
+    "pending": "लंबित",
+    "composeSMS": "SMS अलर्ट लिखें",
+    "sendToFarmer": "किसान को भेजें",
+    "allFarms": "सभी खेत",
+    "refresh": "ताज़ा करें",
+    "liveAlertFeed": "लाइव अलर्ट फ़ीड",
+    "noAlerts": "कोई अलर्ट नहीं मिला।"
+  },
+  "common": {
+    "loading": "लोड हो रहा है…",
+    "error": "कुछ गलत हो गया",
+    "empty": "कोई डेटा उपलब्ध नहीं",
+    "logout": "लॉग आउट",
+    "language": "भाषा",
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "next": "अगला →",
+    "back": "वापस",
+    "allRegistered": "सभी पंजीकृत",
+    "withinRange": "सामान्य सीमा में",
+    "noAlerts": "कोई अलर्ट नहीं",
+    "criticalCount": "गंभीर"
+  },
+  "onboarding": {
+    "chooseLanguage": "अपनी भाषा चुनें",
+    "unitPreferences": "इकाई प्राथमिकताएं",
+    "notifications": "अधिसूचना प्राथमिकताएं",
+    "temperature": "तापमान",
+    "area": "क्षेत्र",
+    "rainfall": "वर्षा",
+    "smsAlerts": "SMS अलर्ट",
+    "emailDigest": "ईमेल डाइजेस्ट",
+    "pushNotifications": "पुश सूचनाएं",
+    "smsFrequency": "SMS आवृत्ति",
+    "daily": "दैनिक",
+    "onAlertOnly": "केवल अलर्ट पर",
+    "enterDashboard": "डैशबोर्ड में जाएं →",
+    "saveAndContinue": "सहेजें और जारी रखें →"
+  }
+}
