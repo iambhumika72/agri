@@ -18,7 +18,7 @@ No alert: "Farm {id} | Good conditions. Water {X}mm today."
 import logging
 from datetime import date
 
-from weather_features import DailyWeatherFeatures
+from .weather_features import DailyWeatherFeatures
 
 logger = logging.getLogger(__name__)
 
@@ -178,3 +178,4 @@ def format_sms_batch(features: list[DailyWeatherFeatures]) -> list[dict[str, str
                 exc,
             )
     return results
+

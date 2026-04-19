@@ -30,7 +30,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-from weather_features import DailyWeatherFeatures, engineer_features
+from .weather_features import DailyWeatherFeatures, engineer_features
 
 logger = logging.getLogger(__name__)
 

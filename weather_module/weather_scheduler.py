@@ -35,10 +35,10 @@ import redis.asyncio as aioredis
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-from weather_client import WeatherClient
-from weather_pipeline_adapter import adapt_batch, pipeline_records_as_dicts
-from weather_sms_formatter import format_sms_batch
-from weather_features import engineer_features
+from .weather_client import WeatherClient
+from .weather_pipeline_adapter import adapt_batch, pipeline_records_as_dicts
+from .weather_sms_formatter import format_sms_batch
+from .weather_features import engineer_features
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -368,3 +368,5 @@ async def _main() -> None:
 if __name__ == "__main__":
     logging.basicConfig(level=getattr(logging, LOG_LEVEL, logging.INFO))
     asyncio.run(_main())
+
+

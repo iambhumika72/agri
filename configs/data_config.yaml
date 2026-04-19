@@ -1,1 +1,38 @@
-ÿþ
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  geotiff_dir: "data/geotiffs"
+  features_dir: "data/features"
+
+  # Sentinel-2 acquisition settings
+  sentinel2:
+    cloud_cover_threshold: 20       # % â€” skip acquisitions above this
+    bands: ["B02", "B03", "B04", "B08"]  # Blue, Green, Red, NIR
+    resolution_meters: 10
+    stale_threshold_days: 10        # Age after which imagery is considered stale
+    composite_format: "PNG"
+
+  # IoT sensor ingestion
+  sensors:
+    polling_interval_seconds: 300   # 5 minutes
+    aggregation_window_minutes: 60  # Hourly averages stored
+    soil_moisture_threshold_pct: 30 # Trigger irrigation alert below this
+
+  # Weather data
+  weather:
+    open_meteo_base_url: "https://api.open-meteo.com/v1"
+    forecast_days: 7
+    historical_days: 14
+    variables:
+      - "temperature_2m_max"
+      - "temperature_2m_min"
+      - "precipitation_sum"
+      - "windspeed_10m_max"
+      - "et0_fao_evapotranspiration"
+
+  # Feature engineering
+  features:
+    soil_field_capacity: 0.40       # 40% volumetric water content
+    gdd_base_temperature: 10.0      # Â°C â€” base temperature for GDD calculation
+    lag_windows: [1, 3, 7]         # Days for lag feature creation
+    rolling_windows: [3, 7]        # Days for rolling statistics

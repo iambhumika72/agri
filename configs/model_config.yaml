@@ -1,1 +1,51 @@
-ÿþ
+models:
+  # Saved artifact paths
+  prophet_yield_path: "configs/prophet_yield.pkl"
+  prophet_irrigation_path: "configs/prophet_irrigation.pkl"
+  lstm_model_path: "configs/lstm_model.pt"
+  lstm_metrics_path: "configs/lstm_model_metrics.yaml"
+  faiss_index_path: "configs/agri_faiss.index"
+  faiss_docs_path: "configs/agri_docs.pkl"
+
+  # Model selection thresholds
+  selection:
+    min_rows_for_lstm: 30           # Rows required to use LSTM
+    ensemble_confidence_floor: 0.5  # Min confidence to publish ensemble result
+
+  # Prophet (see prophet_config.yaml for full settings)
+  prophet:
+    yield_freq: "ME"                # Month-end frequency for yield model
+    regressors: ["ndvi_mean", "rainfall_7d", "gdd"]
+
+  # LSTM (see lstm_config.yaml for full settings)
+  lstm:
+    feature_cols:
+      - "soil_moisture"
+      - "ndvi_mean"
+      - "temperature"
+      - "humidity"
+      - "rainfall"
+      - "gdd"
+      - "drought_index"
+      - "lag_1d"
+      - "lag_7d"
+
+  # Ensemble
+  ensemble:
+    default_prophet_weight: 0.5
+    default_lstm_weight: 0.5
+    drought_lstm_boost: 0.2         # Added to LSTM weight when drought_index > 0.7
+    rain_prophet_boost: 0.2         # Added to Prophet weight when rain_prob > 0.6
+
+  # Irrigation thresholds
+  irrigation:
+    soil_moisture_threshold_pct: 30.0  # Irrigate if moisture falls below this
+    rainfall_threshold_mm: 2.0          # Skip irrigation if forecast rainfall > this
+    default_field_area_m2: 5000.0       # Default farm size for volume estimates
+    runoff_factor: 1.2                  # Volume overhead factor
+
+  # Gemini vision
+  vision:
+    model: "gemini-2.0-flash"
+    temperature: 0.1
+    max_output_tokens: 512

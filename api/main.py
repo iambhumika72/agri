@@ -1,31 +1,38 @@
 """
 api/main.py
 ============
-Main FastAPI application entry point for the Agri Generative AI Platform.
+Main FastAPI application entry point for the AgriSense Generative AI Platform.
 
 Registers:
-  - All API routers (farmer_input, historical_db, health, etc.)
-  - CORS middleware for the React frontend
-  - Lifespan handler that initialises DB tables on startup
-  - Global exception handlers
-
-Run locally:
-    uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+  - All API routers (health, forecast, alerts, recommendations, farmer_input)
+  - CORS middleware for frontend integration
+  - Lifespan handler for resource initialization (DB, models)
 """
 
 from __future__ import annotations
 
 import logging
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from api.routes.farmer_input import router as farmer_input_router
+# Route imports
+from .routes import health, forecast, alerts, recommendations
+from .routes.farmer_input import router as farmer_input_router
 from ingestion.farmer_input_ingestion import init_db
 
-logger = logging.getLogger(__name__)
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%SZ",
+)
+
+log = logging.getLogger(__name__)
+
 
 # ---------------------------------------------------------------------------
 # Lifespan — runs once on startup / shutdown
@@ -33,12 +40,18 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Initialise database tables and any other startup resources."""
-    logger.info("Agri platform starting up…")
-    await init_db()
-    logger.info("Database tables ready.")
+    """Initializes database tables and application resources on startup."""
+    log.info("AgriSense API starting up — version %s", app.version)
+    log.info("Environment: %s", os.environ.get("AGRISENSE_ENV", "development"))
+    
+    try:
+        await init_db()
+        log.info("Database initialized successfully.")
+    except Exception as e:
+        log.error("Failed to initialize database: %s", str(e))
+        
     yield
-    logger.info("Agri platform shutting down.")
+    log.info("AgriSense API shutting down gracefully.")
 
 
 # ---------------------------------------------------------------------------
@@ -46,66 +59,58 @@ async def lifespan(app: FastAPI):
 # ---------------------------------------------------------------------------
 
 def create_app() -> FastAPI:
-    application = FastAPI(
-        title="Agri Generative AI Platform",
+    """Initializes and configures the FastAPI application."""
+    app = FastAPI(
+        title="AgriSense API",
         description=(
-            "Unified Data Pipeline for Sustainable Agriculture. "
+            "Generative AI platform for sustainable agriculture. "
             "Integrates Satellite (Sentinel-2/NDVI), IoT Sensors, "
             "Weather API, Historical DB, and Farmer Input channels."
         ),
-        version="0.1.0",
+        version="1.0.0",
         docs_url="/docs",
         redoc_url="/redoc",
         lifespan=lifespan,
     )
 
-    # ── CORS ──────────────────────────────────────────────────────────────
-    # Allow the React dev server and any deployed frontend origin.
-    application.add_middleware(
+    # ── CORS Middleware ──────────────────────────────────────────────────
+    app.add_middleware(
         CORSMiddleware,
-        allow_origins=[
-            "http://localhost:3000",   # React dev server
-            "http://localhost:5173",   # Vite dev server
-            "https://agri.example.com",
-        ],
+        allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
 
-    # ── Routers ───────────────────────────────────────────────────────────
-    application.include_router(farmer_input_router)
-    # Future routers (uncomment as modules are built):
-    # application.include_router(satellite_router)
-    # application.include_router(iot_router)
-    # application.include_router(weather_router)
-    # application.include_router(historical_db_router)
-    # application.include_router(generative_router)
+    # ── Routers ──────────────────────────────────────────────────────────
+    app.include_router(health.router)
+    app.include_router(forecast.router)
+    app.include_router(alerts.router)
+    app.include_router(recommendations.router)
+    app.include_router(farmer_input_router)
 
     # ── Global exception handlers ─────────────────────────────────────────
 
-    @application.exception_handler(ValueError)
+    @app.exception_handler(ValueError)
     async def value_error_handler(request: Request, exc: ValueError) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"detail": str(exc)},
         )
 
-    @application.exception_handler(Exception)
+    @app.exception_handler(Exception)
     async def generic_exception_handler(request: Request, exc: Exception) -> JSONResponse:
-        logger.exception("Unhandled exception on %s %s", request.method, request.url)
+        log.exception("Unhandled exception on %s %s", request.method, request.url)
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={"detail": "An internal server error occurred."},
         )
 
-    # ── Health probe ──────────────────────────────────────────────────────
-
-    @application.get("/health", tags=["Health"], summary="Liveness probe")
-    async def health_check():
-        return {"status": "ok", "service": "agri-platform"}
-
-    return application
+    return app
 
 
 app = create_app()
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("api.main:app", host="0.0.0.0", port=8000, reload=True)
