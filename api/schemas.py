@@ -42,6 +42,9 @@ class FullForecastResponse(BaseModel):
     weather: List[WeatherResponse]
     features: FeatureVectorResponse
     recommendation_context: str
+    predicted_yield: Optional[float] = None
+    irrigation_schedule: Optional[List[dict]] = None
+    forecast_model_used: Optional[str] = None
 
 class HealthResponse(BaseModel):
     status: str

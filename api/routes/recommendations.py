@@ -59,73 +59,73 @@ class RecommendationResponse(BaseModel):
 async def generate_recommendation(request: RecommendationRequest):
     """
     Generates an AI-powered farm advisory synthesized from all available data.
-    Calls the Gemini generative module for natural language advice.
     """
-    log.info(
-        "Generating recommendation for farm=%s crop=%s lang=%s",
-        request.farm_id, request.crop_type, request.language,
-    )
+    log.info("Generating recommendation for farm=%s crop=%s", request.farm_id, request.crop_type)
 
     try:
         from generative.recommendation_engine import RecommendationEngine
         from generative.multilingual import translate_advisory, translate_sms
+        from models.schemas import IrrigationSchedule, YieldForecast
+        from preprocessing.schemas import FeatureVector
+        from ingestion.farmer_input_ingestion import FarmerInputIngester
 
         engine = RecommendationEngine()
+        
+        # If context is missing, we try to build a minimal one from history
+        if not request.farm_context:
+            ingester = FarmerInputIngester()
+            history = await ingester.fetch_farmer_history(request.farm_id, limit=5)
+            pest_summary = ", ".join([f"{h['observed_issue']} ({h['severity']})" for h in history if h.get("observed_issue")])
+            request.farm_context = (
+                f"Farm ID: {request.farm_id}\n"
+                f"Crop: {request.crop_type} | Season: {request.season}\n"
+                f"Recent Observations: {pest_summary or 'None'}\n"
+                f"Current Moisture: {request.soil_moisture or '35.0'}%\n"
+            )
 
-        # Build a simple context from provided fields if no pre-built context
-        context = request.farm_context or (
-            f"Farm: {request.farm_id} | Crop: {request.crop_type} | Season: {request.season}\n"
-            f"Soil moisture: {request.soil_moisture or 'N/A'}% | "
-            f"Irrigation need: {request.irrigation_score or 'N/A'}/10 | "
-            f"Pest risk: {request.pest_risk or 'N/A'}/1.0 | "
-            f"Yield forecast: {request.predicted_yield or 'N/A'} kg/ha"
+        # Prepare structured data for the engine
+        irr_schedule = IrrigationSchedule(
+            farm_id=request.farm_id,
+            total_water_needed_liters=0,
+            confidence=0.8,
+            schedule=[]
         )
-
-        # Build minimal mock objects for the engine when full pipeline data is absent
-        class _MockIrr:
-            farm_id = request.farm_id
-            total_water_needed_liters = 0
-            next_critical_date = None
-            confidence = 0.75
-            schedule = []
-
-        class _MockYield:
-            farm_id = request.farm_id
-            crop_type = request.crop_type
-            predicted_yield = request.predicted_yield or 0
-            yield_lower = 0
-            yield_upper = 0
-            trend_component = 0
-            key_drivers = []
-
-        class _MockFV:
-            farm_id = request.farm_id
-            crop_growth_stage = "unknown"
-            pest_risk_score = request.pest_risk or 0.0
-            irrigation_need_score = request.irrigation_score or 0.0
+        
+        yield_forecast = YieldForecast(
+            farm_id=request.farm_id,
+            crop_type=request.crop_type,
+            predicted_yield=request.predicted_yield or 0.0,
+            yield_lower=0.0,
+            yield_upper=0.0,
+            key_drivers=["History", "Weather"]
+        )
+        
+        fv = FeatureVector(
+            farm_id=request.farm_id,
+            feature_timestamp=datetime.utcnow(),
+            crop_growth_stage="vegetative",
+            pest_risk_score=request.pest_risk or 0.1,
+            irrigation_need_score=request.irrigation_score or 5.0,
+            ndvi_trend=0.01,
+            vegetation_zone="healthy",
+            soil_moisture_7d_avg=request.soil_moisture or 35.0
+        )
 
         recommendation = engine.generate_full_advisory(
             farm_id=request.farm_id,
             crop_type=request.crop_type,
             season=request.season,
-            farm_context=context,
-            irrigation_schedule=_MockIrr(),
-            yield_forecast=_MockYield(),
-            feature_vector=_MockFV(),
+            farm_context=request.farm_context,
+            irrigation_schedule=irr_schedule,
+            yield_forecast=yield_forecast,
+            feature_vector=fv,
             vision_analysis=None,
         )
 
-        # Translate if needed
+        # Translation
         full_advisory = recommendation.full_advisory
-        irr_advice = recommendation.irrigation_advice
-        yld_advice = recommendation.yield_advice
-        pest_advice = recommendation.pest_advice
-        sms = recommendation.sms_message if request.include_sms else None
-
         if request.language != "en":
             full_advisory = translate_advisory(full_advisory, request.language)
-            if sms:
-                sms = translate_sms(sms, request.language)
 
         return RecommendationResponse(
             farm_id=request.farm_id,
@@ -133,10 +133,10 @@ async def generate_recommendation(request: RecommendationRequest):
             language=request.language,
             generated_at=datetime.utcnow(),
             full_advisory=full_advisory,
-            irrigation_advice=irr_advice,
-            yield_advice=yld_advice,
-            pest_advice=pest_advice,
-            sms_message=sms,
+            irrigation_advice=recommendation.irrigation_advice,
+            yield_advice=recommendation.yield_advice,
+            pest_advice=recommendation.pest_advice,
+            sms_message=recommendation.sms_message if request.include_sms else None,
             model_used=recommendation.model_used,
             confidence=recommendation.confidence,
         )

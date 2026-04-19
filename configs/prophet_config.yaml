@@ -1,0 +1,9 @@
+seasonality_mode: multiplicative
+changepoint_prior_scale: 0.05
+holidays_prior_scale: 10.0
+n_changepoints: 25
+seasonality_prior_scale: 10.0
+uncertainty_samples: 1000
+daily_seasonality: false
+weekly_seasonality: true
+yearly_seasonality: true

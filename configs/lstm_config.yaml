@@ -1,0 +1,10 @@
+sequence_len: 30
+forecast_horizon: 7
+hidden_size: 64
+num_layers: 2
+dropout: 0.2
+learning_rate: 0.001
+batch_size: 32
+epochs: 100
+patience: 10
+model_version: "1.0.0"
