@@ -9,20 +9,29 @@ import WeatherPage from './pages/WeatherPage';
 import InsightsPage from './pages/InsightsPage';
 import AlertsPage from './pages/AlertsPage';
 import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import LanguageSelectPage from './pages/LanguageSelectPage';
 import OnboardingPage from './pages/OnboardingPage';
+
+/** Wraps route outlet with a fadeIn animation keyed to pathname */
+import { useEffect } from 'react';
 
 /** Wraps route outlet with a fadeIn animation keyed to pathname */
 function AnimatedRoutes() {
   const location = useLocation();
+
+  // Redirect to language select if no language preference 
+  useEffect(() => {
+    if (!localStorage.getItem('krishi_lang') && location.pathname !== '/language') {
+      window.location.href = '/language';
+    }
+  }, [location.pathname]);
+
   return (
     <div key={location.pathname} style={{ animation: 'fadeIn 200ms ease-out both' }}>
       <Routes location={location}>
         {/* Public auth routes */}
+        <Route path="/language" element={<LanguageSelectPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
         {/* Onboarding (needs auth) */}
         <Route

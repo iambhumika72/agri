@@ -1,0 +1,83 @@
+{
+  "auth": {
+    "name_label": "તમારું નામ",
+    "phone_label": "મોબાઇલ નંબર",
+    "login_btn": "KrishiAI માં જાઓ",
+    "privacy_note": "તમારી માહિતી સુરક્ષિત છે",
+    "name_placeholder": "દા.ત. રમેશ કુમાર",
+    "phone_placeholder": "10 અંકનો નંબર",
+    "validation_name": "કૃપા કરીને નામ દાખલ કરો",
+    "validation_phone": "સાચો 10 અંકનો નંબર દાખલ કરો"
+  },
+  "lang": {
+    "choose_title": "તમારી ભાષા પસંદ કરો",
+    "choose_subtitle": "સમગ્ર એપ્લિકેશન તમારી ભાષામાં કામ કરશે",
+    "continue_btn": "ચાલુ રાખો"
+  },
+  "nav": {
+    "dashboard": "હોમ",
+    "farms": "મારા ખેતરો",
+    "weather": "હવામાન",
+    "insights": "AI સલાહ",
+    "alerts": "સૂચનાઓ",
+    "logout": "લૉગ આઉટ"
+  },
+  "page": {
+    "dashboard": {
+      "title": "હોમ",
+      "desc": "આજ માટે તમારા ખેતરનો સારાંશ."
+    },
+    "farms": {
+      "title": "મારા ખેતરો",
+      "desc": "તમારા બધા નોંધાયેલા ખેતરોની વિગતો જુઓ."
+    },
+    "weather": {
+      "title": "હવામાન આગાહી",
+      "desc": "તમારા ખેતર માટે 7-દિવસની હવામાન આગાહી."
+    },
+    "insights": {
+      "title": "AI સલાહ",
+      "desc": "તમારા પાક માટે AI સલાહ."
+    },
+    "alerts": {
+      "title": "સૂચનાઓ અને SMS",
+      "desc": "મહત્વપૂર્ણ ટિપ્પણીઓ. ખેડૂતોને SMS મોકલો."
+    }
+  },
+  "dashboard": {
+    "active_farms": "સક્રિય ખેતરો",
+    "soil_moisture": "માટીની ભેજ",
+    "alerts_today": "આજની સૂચનાઓ",
+    "next_irrigation": "આગામી સિંચાઈ",
+    "viewAll": "બધા જુઓ"
+  },
+  "farm": {
+    "overview": "દළદર્શન",
+    "weather": "હવામાન",
+    "insights": "AI સલાહ",
+    "alerts": "સૂચના ઇતિહાસ",
+    "send_sms": "SMS મોકલો",
+    "drought_risk": "દુકાળનું જોખમ",
+    "frost_warning": "ઝાકળ ની આગાહી",
+    "heat_stress": "ગરમી નું જોખમ"
+  },
+  "weather": {
+    "today": "આજે",
+    "rainfall": "વરસાદ",
+    "wind": "પવન",
+    "humidity": "ભેજ",
+    "crop_season": "પાકની ઋતુ",
+    "kharif": "ખરીફ",
+    "rabi": "રવિ",
+    "zaid": "ઝૈદ"
+  },
+  "common": {
+    "loading": "લોડ થઈ રહ્યું છે...",
+    "error": "કંઈક ખોટું થયું",
+    "retry": "ફરી પ્રયાસ કરો",
+    "no_data": "કોઈ માહિતી ઉપલબ્ધ નથી",
+    "save": "સાચવો",
+    "back": "પાછા",
+    "last_updated": "છેલ્લો સુધારો"
+  }
+}

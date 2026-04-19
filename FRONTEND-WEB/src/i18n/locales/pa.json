@@ -1,0 +1,83 @@
+{
+  "auth": {
+    "name_label": "ਤੁਹਾਡਾ ਨਾਮ",
+    "phone_label": "ਮੋਬਾਈਲ ਨੰਬਰ",
+    "login_btn": "KrishiAI ਵਿੱਚ ਦਾਖਲ ਹੋਵੋ",
+    "privacy_note": "ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਸੁਰੱਖਿਅਤ ਹੈ",
+    "name_placeholder": "ਜਿਵੇਂ: ਰਮੇਸ਼ ਕੁਮਾਰ",
+    "phone_placeholder": "10 ਅੰਕਾਂ ਦਾ ਨੰਬਰ",
+    "validation_name": "ਕਿਰਪਾ ਕਰਕੇ ਨਾਮ ਦਰਜ ਕਰੋ",
+    "validation_phone": "ਸਹੀ 10 ਅੰਕਾਂ ਦਾ ਨੰਬਰ ਦਰਜ ਕਰੋ"
+  },
+  "lang": {
+    "choose_title": "ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ",
+    "choose_subtitle": "ਸਾਰੀ ਐਪ ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਵਿੱਚ ਕੰਮ ਕਰੇਗੀ",
+    "continue_btn": "ਜਾਰੀ ਰੱਖੋ"
+  },
+  "nav": {
+    "dashboard": "ਹੋਮ",
+    "farms": "ਮੇਰੇ ਖੇਤ",
+    "weather": "ਮੌਸਮ",
+    "insights": "AI ਸਲਾਹ",
+    "alerts": "ਸੂਚਨਾਵਾਂ",
+    "logout": "ਬਾਹਰ ਜਾਓ"
+  },
+  "page": {
+    "dashboard": {
+      "title": "ਹੋਮ",
+      "desc": "ਅੱਜ ਲਈ ਤੁਹਾਡੇ ਖੇਤ ਦਾ ਸਾਰಾಂಶ।"
+    },
+    "farms": {
+      "title": "ਮੇਰੇ ਖੇਤ",
+      "desc": "ਆਪਣੇ ਸਾਰੇ ਦਰਜ ਕੀਤੇ ਖੇਤਾਂ ਦੇ ਵੇਰਵੇ ਦੇਖੋ।"
+    },
+    "weather": {
+      "title": "ਮੌਸਮ ਦੀ ਭਵਿੱਖਬਾਣੀ",
+      "desc": "ਤੁਹਾਡੇ ਖੇਤ ਲਈ 7 ਦਿਨਾਂ ਦਾ ਮੌਸਮ।"
+    },
+    "insights": {
+      "title": "AI ਸਲਾਹ",
+      "desc": "ਤੁਹਾਡੀ ਫਸਲ ਲਈ AI ਸਲਾਹ।"
+    },
+    "alerts": {
+      "title": "ਸੂਚਨਾਵਾਂ ਅਤੇ SMS",
+      "desc": "ਮਹੱਤਵਪੂਰਨ ਸੂਚਨਾਵਾਂ। ਕਿਸਾਨਾਂ ਨੂੰ SMS ਭੇਜੋ।"
+    }
+  },
+  "dashboard": {
+    "active_farms": "ਸਰਗਰਮ ਖੇਤ",
+    "soil_moisture": "ਮਿੱਟੀ ਦੀ ਨਮੀ",
+    "alerts_today": "ਅੱਜ ਦੀਆਂ ਸੂਚਨਾਵਾਂ",
+    "next_irrigation": "ਅਗਲੀ ਸਿੰਚਾਈ",
+    "viewAll": "ਸਾਰੇ ਦੇਖੋ"
+  },
+  "farm": {
+    "overview": "ਸਾਰਾਂਸ਼",
+    "weather": "ਮੌਸਮ",
+    "insights": "AI ਸਲਾਹ",
+    "alerts": "ਸੂਚਨਾ ਇਤਿਹਾਸ",
+    "send_sms": "SMS ਭੇਜੋ",
+    "drought_risk": "ਸੋਕੇ ਦਾ ਖਤਰਾ",
+    "frost_warning": "ਪਾਲੇ ਦੀ ਚੇਤਾਵਨੀ",
+    "heat_stress": "ਗਰਮੀ ਦਾ ਤਣਾਅ"
+  },
+  "weather": {
+    "today": "ਅੱਜ",
+    "rainfall": "ਮੀਂਹ",
+    "wind": "ਹਵਾ",
+    "humidity": "ਨਮੀ",
+    "crop_season": "ਫਸਲ ਦਾ ਮੌਸਮ",
+    "kharif": "ਖਰੀਫ",
+    "rabi": "ਹਾੜੀ",
+    "zaid": "ਜਾਇਦ"
+  },
+  "common": {
+    "loading": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...",
+    "error": "ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ",
+    "retry": "ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
+    "no_data": "ਕੋਈ ਡਾਟਾ ਨਹੀਂ",
+    "save": "ਸੇਵ ਕਰੋ",
+    "back": "ਵਾਪਸ",
+    "last_updated": "ਆਖਰੀ ਅੱਪਡੇਟ"
+  }
+}

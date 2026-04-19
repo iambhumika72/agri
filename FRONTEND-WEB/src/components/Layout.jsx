@@ -13,17 +13,21 @@ import QuickActionFAB from './QuickActionFAB';
 import TopProgressBar from './TopProgressBar';
 
 const LANGUAGES = [
-  { code: 'en', flag: '🇬🇧', label: 'English' },
-  { code: 'hi', flag: '🇮🇳', label: 'हिन्दी' },
-  { code: 'mr', flag: '🇮🇳', label: 'मराठी' },
-  { code: 'ta', flag: '🇮🇳', label: 'தமிழ்' },
-  { code: 'sw', flag: '🇰🇪', label: 'Kiswahili' },
-  { code: 'fr', flag: '🇫🇷', label: 'Français' },
+  { code: 'en', flag: '🇬🇧', label: 'English', state: 'All India' },
+  { code: 'hi', flag: '🇮🇳', label: 'हिन्दी', state: 'UP · MP · Bihar' },
+  { code: 'mr', flag: '🇮🇳', label: 'मराठी', state: 'Maharashtra' },
+  { code: 'pa', flag: '🇮🇳', label: 'ਪੰਜਾਬੀ', state: 'Punjab · Haryana' },
+  { code: 'gu', flag: '🇮🇳', label: 'ગુજરાતી', state: 'Gujarat' },
+  { code: 'kn', flag: '🇮🇳', label: 'ಕನ್ನಡ', state: 'Karnataka' },
+  { code: 'te', flag: '🇮🇳', label: 'తెలుగు', state: 'Andhra · Telangana' },
+  { code: 'ta', flag: '🇮🇳', label: 'தமிழ்', state: 'Tamil Nadu' },
+  { code: 'bn', flag: '🇮🇳', label: 'বাংলা', state: 'West Bengal' },
+  { code: 'en', flag: '🇬🇧', label: 'English', state: 'Global' },
 ];
 
 function LanguageSwitcher() {
   const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState(localStorage.getItem('agri_lang') || 'en');
+  const [current, setCurrent] = useState(localStorage.getItem('krishi_lang') || 'hi');
   const ref = useRef(null);
 
   useEffect(() => {
@@ -34,7 +38,7 @@ function LanguageSwitcher() {
 
   const changeLanguage = (code) => {
     i18n.changeLanguage(code);
-    localStorage.setItem('agri_lang', code);
+    localStorage.setItem('krishi_lang', code);
     setCurrent(code);
     setOpen(false);
   };
@@ -61,11 +65,16 @@ function LanguageSwitcher() {
             <button
               key={lang.code}
               onClick={() => changeLanguage(lang.code)}
-              className="w-full flex items-center gap-2.5 px-3 py-2.5 text-sm hover:bg-neutral-50 transition-colors text-left"
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                current === lang.code ? 'bg-primary-50 text-primary-700 font-medium' : 'text-neutral-700 hover:bg-neutral-50'
+              }`}
             >
-              <span>{lang.flag}</span>
-              <span className="text-neutral-700 flex-1">{lang.label}</span>
-              {current === lang.code && <Check size={13} className="text-primary-500" />}
+              <div className="w-8 h-8 rounded-full bg-[#1a2e1a] flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
+                {lang.code === 'en' ? 'En' : lang.label.charAt(0)}
+              </div>
+              <div className="text-left">
+                 <p className="leading-tight">{lang.code === 'en' ? 'English' : `${lang.label} · ${lang.code.toUpperCase()}`}</p>
+              </div>
             </button>
           ))}
         </div>
@@ -96,7 +105,7 @@ function SidebarContent({ onClose }) {
         </div>
         <div className="min-w-0">
           <p className="text-white font-semibold text-sm leading-tight">KrishiAI</p>
-          <p className="text-neutral-400 text-xs">AgriDashboard v1.0</p>
+          <p className="text-neutral-400 text-xs">v2.0 (India)</p>
         </div>
         {onClose && (
           <button onClick={onClose} className="ml-auto text-neutral-400 hover:text-white md:hidden" aria-label="Close sidebar">
@@ -199,7 +208,7 @@ export default function Layout({ children }) {
           </div>
           <div className="ml-auto flex items-center gap-2">
             <span className="hidden sm:block text-xs text-neutral-400 font-medium">
-              Generative AI for Sustainable Agriculture
+              Agricultural Intelligence Platform
             </span>
             {/* Language switcher */}
             <LanguageSwitcher />

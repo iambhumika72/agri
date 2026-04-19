@@ -1,0 +1,83 @@
+{
+  "auth": {
+    "name_label": "আপনার নাম",
+    "phone_label": "মোবাইল নম্বর",
+    "login_btn": "KrishiAI প্রবেশ করুন",
+    "privacy_note": "আপনার তথ্য নিরাপদ",
+    "name_placeholder": "যেমন: রমেশ কুমার",
+    "phone_placeholder": "10 অঙ্কের নম্বর",
+    "validation_name": "আপনার নাম লিখুন",
+    "validation_phone": "সঠিক 10 অঙ্কের নম্বর লিখুন"
+  },
+  "lang": {
+    "choose_title": "আপনার ভাষা নির্বাচন করুন",
+    "choose_subtitle": "পুরো অ্যাপটি আপনার ভাষায় কাজ করবে",
+    "continue_btn": "চালিয়ে যান"
+  },
+  "nav": {
+    "dashboard": "হোম",
+    "farms": "আমার খামারগুলো",
+    "weather": "আবহাওয়া",
+    "insights": "AI পরামর্শ",
+    "alerts": "সতর্কতা",
+    "logout": "লগআউট"
+  },
+  "page": {
+    "dashboard": {
+      "title": "হোম",
+      "desc": "আপনার খামারের সারাংশ।"
+    },
+    "farms": {
+      "title": "আমার খামারগুলো",
+      "desc": "আপনার সমস্ত নিবন্ধিত খামারের বিবরণ দেখুন।"
+    },
+    "weather": {
+      "title": "আবহাওয়ার পূর্বাভাস",
+      "desc": "আপনার খামারের জন্য ৭ দিনের আবহাওয়া।"
+    },
+    "insights": {
+      "title": "AI পরামর্শ",
+      "desc": "আপনার ফসলের জন্য এআই পরামর্শ।"
+    },
+    "alerts": {
+      "title": "সতর্কতা এবং SMS",
+      "desc": "গুরুত্বপূর্ণ সতর্কতা এবং এসএমএস।"
+    }
+  },
+  "dashboard": {
+    "active_farms": "সক্রিয় খামার",
+    "soil_moisture": "মাটির আর্দ্রতা",
+    "alerts_today": "আজকের সতর্কতা",
+    "next_irrigation": "পরবর্তী সেচ",
+    "viewAll": "সব দেখুন"
+  },
+  "farm": {
+    "overview": "সারাংশ",
+    "weather": "আবহাওয়া",
+    "insights": "AI পরামর্শ",
+    "alerts": "সতর্কতা ইতিহাস",
+    "send_sms": "এসএমএস পাঠান",
+    "drought_risk": "খরার ঝুঁকি",
+    "frost_warning": "হিম সতর্কতা",
+    "heat_stress": "তাপমাত্রা চাপ"
+  },
+  "weather": {
+    "today": "আজ",
+    "rainfall": "বৃষ্টিপাত",
+    "wind": "বাতাস",
+    "humidity": "আর্দ্রতা",
+    "crop_season": "ফসলের মৌসুম",
+    "kharif": "খরিফ",
+    "rabi": "রবি",
+    "zaid": "জায়েদ"
+  },
+  "common": {
+    "loading": "লোড হচ্ছে...",
+    "error": "কিছু ভুল হয়েছে",
+    "retry": "আবার চেষ্টা করুন",
+    "no_data": "কোন তথ্য নেই",
+    "save": "সংরক্ষণ করুন",
+    "back": "পিছনে",
+    "last_updated": "সর্বশেষ আপডেট"
+  }
+}

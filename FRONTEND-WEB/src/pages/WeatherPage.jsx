@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { CloudSun, AlertTriangle, Flame, Snowflake, Wind, Droplets, Thermometer } from 'lucide-react';
+import { CloudSun, AlertTriangle, Flame, Snowflake, Wind, Droplets, Thermometer, Cloud, MapPin } from 'lucide-react';
 import { useFarms } from '../hooks/useFarms';
 import { useWeather } from '../hooks/useWeather';
+import PageHeader from '../components/PageHeader';
+import DataFreshnessBar from '../components/DataFreshnessBar';
 
 const WMO_LABELS = {
   0: 'Clear Sky', 1: 'Mainly Clear', 2: 'Partly Cloudy', 3: 'Overcast',
@@ -98,11 +100,14 @@ export default function WeatherPage() {
   const selectedFarm = farms?.find((f) => f.id === selectedFarmId);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-bold text-neutral-800">Weather Forecast</h1>
-        <p className="text-sm text-neutral-400 mt-0.5">7-day forecast with agronomic risk indicators</p>
-      </div>
+    <div className="max-w-7xl mx-auto space-y-6 pb-24 md:pb-8">
+      <PageHeader 
+        titleKey="page.weather.title" 
+        descKey="page.weather.desc" 
+        icon={Cloud} 
+      />
+
+      <DataFreshnessBar />
 
       {/* Farm selector */}
       <div className="card flex items-center gap-4 flex-wrap">

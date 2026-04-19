@@ -4,6 +4,7 @@ import { useInsights, useModelStatus } from '../hooks/useInsights';
 import InsightCard from '../components/InsightCard';
 import SMSPreview from '../components/SMSPreview';
 import { sendInsightSMS } from '../api/insights';
+import PageHeader from '../components/PageHeader';
 
 const CATEGORIES = ['All', 'Irrigation', 'Pest', 'Yield', 'Weather'];
 const PAGE_SIZE = 10;
@@ -67,11 +68,12 @@ export default function InsightsPage() {
   const totalPages = insights ? Math.ceil(insights.length / PAGE_SIZE) : 1;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-bold text-neutral-800">AI Insights</h1>
-        <p className="text-sm text-neutral-400 mt-0.5">Recommendations from Vision, Forecaster & LLM modules</p>
-      </div>
+    <div className="max-w-7xl mx-auto space-y-6 pb-24 md:pb-8">
+      <PageHeader 
+        titleKey="page.insights.title" 
+        descKey="page.insights.desc" 
+        icon={Lightbulb} 
+      />
 
       <ModelStatusBar modelStatus={modelStatus} />
 

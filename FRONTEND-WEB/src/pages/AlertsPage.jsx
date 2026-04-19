@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Bell, RefreshCw, Send, Users, CheckCircle, AlertTriangle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Bell, RefreshCw, Send, Users, CheckCircle, AlertTriangle, Search, CloudRain, ThermometerSun, Leaf } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 import { useAlerts, useSMSStats } from '../hooks/useAlerts';
 import { useFarms } from '../hooks/useFarms';
 import AlertBadge from '../components/AlertBadge';
@@ -48,9 +50,14 @@ export default function AlertsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-bold text-neutral-800">Alerts & SMS</h1>
+    <div className="max-w-7xl mx-auto space-y-6 pb-24 md:pb-8">
+      <PageHeader 
+        titleKey="page.alerts.title" 
+        descKey="page.alerts.desc" 
+        icon={Bell} 
+      />
+
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between px-6 md:px-0" style={{ animation: 'fadeIn 300ms ease-out both' }}>
         <p className="text-sm text-neutral-400 mt-0.5">Monitor alerts and send SMS notifications to farmers</p>
       </div>
 

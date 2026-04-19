@@ -1,0 +1,83 @@
+{
+  "auth": {
+    "name_label": "ನಿಮ್ಮ ಹೆಸರು",
+    "phone_label": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+    "login_btn": "KrishiAI ಗೆ ಪ್ರವೇಶಿಸಿ",
+    "privacy_note": "ನಿಮ್ಮ ಮಾಹಿತಿಯು ಸುರಕ್ಷಿತವಾಗಿದೆ",
+    "name_placeholder": "ಉದಾ: ರಮೇಶ್ ಕುಮಾರ್",
+    "phone_placeholder": "10 ಅಂಕಿಯ ಸಂಖ್ಯೆ",
+    "validation_name": "ದಯವಿಟ್ಟು ಹೆಸರು ನಮೂದಿಸಿ",
+    "validation_phone": "ಸರಿಯಾದ 10 ಅಂಕಿಯ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ"
+  },
+  "lang": {
+    "choose_title": "ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    "choose_subtitle": "ಸಂಪೂರ್ಣ ಅಪ್ಲಿಕೇಶನ್ ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ",
+    "continue_btn": "ಮುಂದುವರಿಯಿರಿ"
+  },
+  "nav": {
+    "dashboard": "ಮುಖಪುಟ",
+    "farms": "ನನ್ನ ಹೊಲಗಳು",
+    "weather": "ಹವಾಮಾನ",
+    "insights": "AI ಸಲಹೆ",
+    "alerts": "ಅಧಿಸೂಚನೆಗಳು",
+    "logout": "ಲಾಗ್ ಔಟ್"
+  },
+  "page": {
+    "dashboard": {
+      "title": "ಮುಖಪುಟ",
+      "desc": "ಇಂದಿನ ನಿಮ್ಮ ಹೊಲದ ಸಾರಾಂಶ."
+    },
+    "farms": {
+      "title": "ನನ್ನ ಹೊಲಗಳು",
+      "desc": "ನಿಮ್ಮ ಎಲ್ಲ ಹೊಲಗಳ ವಿವರಗಳನ್ನು ನೋಡಿ."
+    },
+    "weather": {
+      "title": "ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ",
+      "desc": "ನಿಮ್ಮ ಹೊಲಕ್ಕೆ 7 ದಿನಗಳ ಹವಾಮಾನ."
+    },
+    "insights": {
+      "title": "AI ಸಲಹೆ",
+      "desc": "ನಿಮ್ಮ ಬೆಳೆಗಳಿಗೆ AI ಸಲಹೆ."
+    },
+    "alerts": {
+      "title": "ಅಧಿಸೂಚನೆಗಳು ಮತ್ತು SMS",
+      "desc": "ಪ್ರಮುಖ ಎಚ್ಚರಿಕೆಗಳು. ರೈತರಿಗೆ ರಿಮೈಂಡರ್ ಕಳುಹಿಸಿ."
+    }
+  },
+  "dashboard": {
+    "active_farms": "ಸಕ್ರಿಯ ಹೊಲಗಳು",
+    "soil_moisture": "ಮಣ್ಣಿನ ತೇವಾಂಶ",
+    "alerts_today": "ಇಂದಿನ ಅಧಿಸೂಚನೆಗಳು",
+    "next_irrigation": "ಮುಂದಿನ ನೀರಾವರಿ",
+    "viewAll": "ಎಲ್ಲವನ್ನೂ ನೋಡಿ"
+  },
+  "farm": {
+    "overview": "ಅವಲೋಕನ",
+    "weather": "ಹವಾಮಾನ",
+    "insights": "AI ಸಲಹೆ",
+    "alerts": "ಅಧಿಸೂಚನೆ ಇತಿಹಾಸ",
+    "send_sms": "SMS ಕಳುಹಿಸಿ",
+    "drought_risk": "ಬರಗಾಲದ ಅಪಾಯ",
+    "frost_warning": "ಹಿಮದ ಎಚ್ಚರಿಕೆ",
+    "heat_stress": "ಶಾಖದ ಒತ್ತಡ"
+  },
+  "weather": {
+    "today": "ಇಂದು",
+    "rainfall": "ಮಳೆ",
+    "wind": "ಗಾಳಿ",
+    "humidity": "ತೇವಾಂಶ",
+    "crop_season": "ಬೆಳೆ ಋತು",
+    "kharif": "ಖಾರಿಫ್",
+    "rabi": "ರಬಿ",
+    "zaid": "ಝೈದ್"
+  },
+  "common": {
+    "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+    "error": "ಏನೋ ತಪ್ಪಾಗಿದೆ",
+    "retry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+    "no_data": "ಯಾವುದೇ ಡೇಟಾ ಲಭ್ಯವಿಲ್ಲ",
+    "save": "ಉಳಿಸಿ",
+    "back": "ಹಿಂದೆ",
+    "last_updated": "ಕೊನೆಯ ನವೀಕರಣ"
+  }
+}

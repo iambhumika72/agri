@@ -1,10 +1,83 @@
 {
-  "nav": { "dashboard": "डॅशबोर्ड", "farms": "शेते", "weather": "हवामान", "insights": "AI अंतर्दृष्टी", "alerts": "सूचना व SMS" },
-  "dashboard": { "title": "डॅशबोर्ड", "subtitle": "सर्व व्यवस्थापित शेतांचा आढावा", "activeFarms": "सक्रिय शेते", "avgMoisture": "सरासरी मातीतील ओलावा", "alertsToday": "आजच्या सूचना", "nextIrrigation": "पुढची सिंचन", "yieldForecast": "7-दिवस उत्पादन अंदाज", "soilMoisture": "शेताप्रमाणे माती ओलावा", "weatherForecast": "7-दिवस हवामान अंदाज", "recentAlerts": "अलीकडील सूचना", "viewAll": "सर्व पहा →", "noAlerts": "आज कोणत्याही सूचना नाहीत. सर्व शेते व्यवस्थित आहेत." },
-  "farms": { "title": "सर्व शेते", "subtitle": "तपशीलवार विश्लेषण पाहण्यासाठी कोणत्याही शेतावर क्लिक करा", "noFarms": "अद्याप कोणतेही शेत नोंदणीकृत नाही." },
-  "weather": { "title": "हवामान अंदाज", "subtitle": "कृषी जोखीम निर्देशकांसह 7-दिवसांचा अंदाज", "selectFarm": "शेत निवडा" },
-  "insights": { "title": "AI अंतर्दृष्टी", "subtitle": "Vision, Forecaster आणि LLM मॉड्यूलकडून शिफारसी", "filterAll": "सर्व", "noInsights": "निवडलेल्या फिल्टरसाठी कोणतीही अंतर्दृष्टी आढळली नाही.", "sendSMS": "SMS पाठवा" },
-  "alerts": { "title": "सूचना व SMS", "subtitle": "सूचना निरीक्षण करा आणि शेतकऱ्यांना SMS पाठवा", "sentToday": "आज पाठवले", "delivered": "वितरित", "failed": "अयशस्वी", "pending": "प्रलंबित", "composeSMS": "SMS सूचना तयार करा", "sendToFarmer": "शेतकऱ्याला पाठवा", "allFarms": "सर्व शेते", "refresh": "ताजे करा", "liveAlertFeed": "थेट सूचना फीड", "noAlerts": "कोणतीही सूचना आढळली नाही." },
-  "common": { "loading": "लोड होत आहे…", "error": "काहीतरी चुकले", "empty": "डेटा उपलब्ध नाही", "logout": "बाहेर पडा", "language": "भाषा", "save": "जतन करा", "cancel": "रद्द करा", "next": "पुढे →", "back": "मागे", "allRegistered": "सर्व नोंदणीकृत", "withinRange": "सामान्य श्रेणीत", "noAlerts": "कोणत्याही सूचना नाहीत", "criticalCount": "गंभीर" },
-  "onboarding": { "chooseLanguage": "आपली भाषा निवडा", "unitPreferences": "युनिट प्राधान्ये", "notifications": "अधिसूचना प्राधान्ये", "temperature": "तापमान", "area": "क्षेत्र", "rainfall": "पाऊस", "smsAlerts": "SMS सूचना", "emailDigest": "ईमेल डायजेस्ट", "pushNotifications": "पुश सूचना", "smsFrequency": "SMS वारंवारता", "daily": "दैनिक", "onAlertOnly": "केवळ सूचनेवर", "enterDashboard": "डॅशबोर्डमध्ये प्रवेश करा →", "saveAndContinue": "जतन करा आणि सुरू ठेवा →" }
+  "auth": {
+    "name_label": "तुमचे नाव",
+    "phone_label": "मोबाईल नंबर",
+    "login_btn": "KrishiAI मध्ये प्रवेश करा",
+    "privacy_note": "तुमची माहिती सुरक्षित आहे",
+    "name_placeholder": "उदा. रमेश कुमार",
+    "phone_placeholder": "10 अंकी नंबर",
+    "validation_name": "कृपया नाव टाका",
+    "validation_phone": "योग्य 10 अंकी नंबर टाका"
+  },
+  "lang": {
+    "choose_title": "तुमची भाषा निवडा",
+    "choose_subtitle": "संपूर्ण अॅप तुमच्या भाषेत काम करेल",
+    "continue_btn": "पुढे जा"
+  },
+  "nav": {
+    "dashboard": "होम",
+    "farms": "माझी शेती",
+    "weather": "हवामान",
+    "insights": "AI सल्ला",
+    "alerts": "सूचना",
+    "logout": "बाहेर पडा"
+  },
+  "page": {
+    "dashboard": {
+      "title": "होम",
+      "desc": "तुमच्या शेताचे आजचे विवरण. माती, हवामान आणि सूचना एका नजरेत तपासा."
+    },
+    "farms": {
+      "title": "माझी शेती",
+      "desc": "तुमच्या नोंदणीकृत शेतांची माहिती पहा."
+    },
+    "weather": {
+      "title": "हवामानाचा अंदाज",
+      "desc": "तुमच्या शेतासाठी 7-दिवसांचा हवामान अंदाज."
+    },
+    "insights": {
+      "title": "AI सल्ला",
+      "desc": "तुमचे पीक, माती आणि हवामानावर आधारित AI कडून शिफारसी."
+    },
+    "alerts": {
+      "title": "सूचना आणि SMS",
+      "desc": "तुमच्या शेतासाठी महत्त्वाच्या सूचना. शेतकऱ्यांना थेट SMS पाठवा."
+    }
+  },
+  "dashboard": {
+    "active_farms": "सक्रिय शेती",
+    "soil_moisture": "सरासरी मातीची आर्द्रता",
+    "alerts_today": "आजच्या सूचना",
+    "next_irrigation": "पुढील सिंचन",
+    "viewAll": "सर्व पहा"
+  },
+  "farm": {
+    "overview": "आढावा",
+    "weather": "हवामान",
+    "insights": "AI सल्ला",
+    "alerts": "सूचना इतिहास",
+    "send_sms": "SMS पाठवा",
+    "drought_risk": "दुष्काळाचा धोका",
+    "frost_warning": "धुक्याचा इशारा",
+    "heat_stress": "उष्णतेचा ताण"
+  },
+  "weather": {
+    "today": "आज",
+    "rainfall": "पाऊस",
+    "wind": "वारा",
+    "humidity": "आर्द्रता",
+    "crop_season": "हंगाम",
+    "kharif": "खरीप",
+    "rabi": "रब्बी",
+    "zaid": "उन्हाळी"
+  },
+  "common": {
+    "loading": "लोड होत आहे...",
+    "error": "काहीतरी चूक झाली",
+    "retry": "पुन्हा प्रयत्न करा",
+    "no_data": "कोणताही डेटा नाही",
+    "save": "जतन करा",
+    "back": "मागे",
+    "last_updated": "अंतिम अपडेट"
+  }
 }

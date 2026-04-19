@@ -1,0 +1,83 @@
+{
+  "auth": {
+    "name_label": "మీ పేరు",
+    "phone_label": "మొబైల్ సంఖ్య",
+    "login_btn": "KrishiAI లోకి ప్రవేశించండి",
+    "privacy_note": "మీ సమాచారం భద్రంగా ఉంది",
+    "name_placeholder": "ఉదా. రమేష్ కుమార్",
+    "phone_placeholder": "10 అంకెల సంఖ్య",
+    "validation_name": "దయచేసి మీ పేరును నమోదు చేయండి",
+    "validation_phone": "సరైన 10 అంకెల సంఖ్యను నమోదు చేయండి"
+  },
+  "lang": {
+    "choose_title": "మీ భాషను ఎంచుకోండి",
+    "choose_subtitle": "మొత్తం యాప్ మీ భాషలో పని చేస్తుంది",
+    "continue_btn": "కొనసాగించండి"
+  },
+  "nav": {
+    "dashboard": "హోమ్",
+    "farms": "నా పొలాలు",
+    "weather": "వాతావరణం",
+    "insights": "AI సలహా",
+    "alerts": "హెచ్చరికలు",
+    "logout": "లాగ్ అవుట్"
+  },
+  "page": {
+    "dashboard": {
+      "title": "హోమ్",
+      "desc": "మీ పొలం సారాంశం."
+    },
+    "farms": {
+      "title": "నా పొలాలు",
+      "desc": "మీ రిజిస్టర్డ్ పొలాల వివరాలను చూడండి."
+    },
+    "weather": {
+      "title": "వాతావరణ సూచన",
+      "desc": "మీ పొలానికి 7 రోజుల వాతావరణం."
+    },
+    "insights": {
+      "title": "AI సలహా",
+      "desc": "మీ పంటలకు AI సలహా."
+    },
+    "alerts": {
+      "title": "హెచ్చరికలు మరియు SMS",
+      "desc": "ముఖ్యమైన హెచ్చరికలు మరియు SMS రక్షించు."
+    }
+  },
+  "dashboard": {
+    "active_farms": "క్రియాశీల పొలాలు",
+    "soil_moisture": "సగటు నేల తేమ",
+    "alerts_today": "నేటి హెచ్చరికలు",
+    "next_irrigation": "తదుపరి నీటిపారుదల",
+    "viewAll": "అన్ని చూడండి"
+  },
+  "farm": {
+    "overview": "అవలోకనం",
+    "weather": "వాతావరణం",
+    "insights": "AI సలహా",
+    "alerts": "హెచ్చరికల చరిత్ర",
+    "send_sms": "SMS పంపండి",
+    "drought_risk": "కరువు ప్రమాదం",
+    "frost_warning": "ఫ్రాస్ట్ హెచ్చరిక",
+    "heat_stress": "వేడి ఒత్తిడి"
+  },
+  "weather": {
+    "today": "నేడు",
+    "rainfall": "వర్షపాతం",
+    "wind": "గాలి",
+    "humidity": "తేమ",
+    "crop_season": "పంట కాలం",
+    "kharif": "ఖరీఫ్",
+    "rabi": "రబీ",
+    "zaid": "జైద్"
+  },
+  "common": {
+    "loading": "లోడ్ అవుతోంది...",
+    "error": "ఏదో తప్పు జరిగింది",
+    "retry": "మళ్ళీ ప్రయత్నించండి",
+    "no_data": "డేటా అందుబాటులో లేదు",
+    "save": "సేవ్ చేయండి",
+    "back": "వెనుకకు",
+    "last_updated": "చివరి అప్‌డేట్"
+  }
+}

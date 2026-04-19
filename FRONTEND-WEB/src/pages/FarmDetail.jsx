@@ -16,6 +16,7 @@ import AlertBadge from '../components/AlertBadge';
 import SMSPreview from '../components/SMSPreview';
 import SoilHealthRadar from '../components/SoilHealthRadar';
 import { sendInsightSMS } from '../api/insights';
+import PageHeader from '../components/PageHeader';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
@@ -82,7 +83,12 @@ export default function FarmDetail() {
   );
 
   return (
-    <div className="space-y-5">
+    <div className="max-w-7xl mx-auto space-y-5 pb-24 md:pb-8">
+      <PageHeader 
+        titleKey="page.farms.title" 
+        descKey="page.farms.desc" 
+        icon={Leaf} 
+      />
       {/* Back link */}
       <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-700">
         <ArrowLeft size={15} />

@@ -9,17 +9,18 @@ import AlertBadge from '../components/AlertBadge';
 import FarmHealthScore from '../components/FarmHealthScore';
 import CropCalendarStrip from '../components/CropCalendarStrip';
 import DataFreshnessBar from '../components/DataFreshnessBar';
+import PageHeader from '../components/PageHeader';
+import { LayoutDashboard } from 'lucide-react';
 import { useFarms } from '../hooks/useFarms';
 import { useAlerts } from '../hooks/useAlerts';
 import { useAllWeather } from '../hooks/useWeather';
 
-// Mock crop calendar data
 const CROP_CALENDAR = [
-  { name: 'Paddy (IR-36)', sowMonth: 6, harvestMonth: 10 },
-  { name: 'Maize (WEMA)', sowMonth: 10, harvestMonth: 1 },
-  { name: 'Tomato (Arka R)', sowMonth: 2, harvestMonth: 5 },
-  { name: 'Pearl Millet', sowMonth: 6, harvestMonth: 9 },
-  { name: 'Cotton (Bt)', sowMonth: 5, harvestMonth: 11 },
+  { name: 'Rice (Kharif)', sowMonth: 6, harvestMonth: 10 },
+  { name: 'Wheat (Rabi)', sowMonth: 11, harvestMonth: 3 },
+  { name: 'Cotton (Kharif)', sowMonth: 5, harvestMonth: 11 },
+  { name: 'Mustard (Rabi)', sowMonth: 10, harvestMonth: 2 },
+  { name: 'Moong (Zaid)', sowMonth: 4, harvestMonth: 6 },
 ];
 
 // Mock farm health sub-scores
@@ -96,13 +97,15 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex items-center justify-between" style={{ animation: 'fadeIn 300ms ease-out both' }}>
-        <div>
-          <h1 className="text-xl font-bold text-neutral-800">{t('dashboard.title')}</h1>
-          <p className="text-sm text-neutral-400 mt-0.5">{t('dashboard.subtitle')}</p>
-        </div>
+    <div className="max-w-7xl mx-auto space-y-6 pb-24 md:pb-8">
+      <PageHeader 
+        titleKey="page.dashboard.title" 
+        descKey="page.dashboard.desc" 
+        icon={LayoutDashboard} 
+      />
+
+      {/* Live data pulse indicator */}
+      <div className="flex items-center justify-end px-6 md:px-0" style={{ animation: 'fadeIn 300ms ease-out both' }}>
         <div className="flex items-center gap-2 text-xs text-teal-600 font-medium bg-teal-50 px-3 py-1.5 rounded-full">
           <Leaf size={12} />
           <span>{totalFarms} {t('dashboard.activeFarms')}</span>
@@ -161,15 +164,17 @@ export default function Dashboard() {
 
       {/* Crop Calendar Strip */}
       <div className="card">
-        <h2 className="text-sm font-semibold text-neutral-700 mb-4">Crop Calendar — All Farms</h2>
+        <h2 className="text-sm font-semibold text-neutral-700 mb-4">{t('weather.crop_season')}</h2>
         <CropCalendarStrip crops={CROP_CALENDAR} />
       </div>
 
       {/* Recent Alerts Table */}
       <div className="card overflow-hidden p-0">
         <div className="px-5 py-4 border-b border-neutral-100 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-neutral-700">{t('dashboard.recentAlerts')}</h2>
-          <Link to="/alerts" className="text-xs text-teal-600 font-medium hover:underline">{t('dashboard.viewAll')}</Link>
+          <h2 className="text-base font-semibold text-neutral-800">{t('nav.farms')}</h2>
+          <Link to="/farms" className="text-sm text-primary-600 font-medium hover:text-primary-700">
+            {t('dashboard.viewAll')} &rarr;
+          </Link>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
