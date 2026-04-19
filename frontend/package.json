@@ -1,0 +1,29 @@
+{
+  "name": "agri-dashboard",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.2",
+    "vite": "^8.0.4"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.99.1",
+    "@vitejs/plugin-react": "^6.0.1",
+    "autoprefixer": "^10.5.0",
+    "axios": "^1.15.0",
+    "i18next": "^26.0.6",
+    "lucide-react": "^1.8.0",
+    "postcss": "^8.5.10",
+    "prop-types": "^15.8.1",
+    "react-i18next": "^17.0.4",
+    "react-router-dom": "^6.30.3",
+    "recharts": "^3.8.1",
+    "tailwindcss": "^3.4.19"
+  }
+}

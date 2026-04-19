@@ -1,0 +1,85 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "farms": "Farms",
+    "weather": "Weather",
+    "insights": "AI Insights",
+    "alerts": "Alerts & SMS"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Overview of all managed farms",
+    "activeFarms": "Active Farms",
+    "avgMoisture": "Avg Soil Moisture",
+    "alertsToday": "Alerts Today",
+    "nextIrrigation": "Next Irrigation",
+    "yieldForecast": "7-Day Yield Forecast (All Farms Avg)",
+    "soilMoisture": "Soil Moisture by Farm",
+    "weatherForecast": "7-Day Weather Forecast",
+    "recentAlerts": "Recent Alerts",
+    "viewAll": "View all →",
+    "noAlerts": "No alerts today. All farms are running smoothly."
+  },
+  "farms": {
+    "title": "All Farms",
+    "subtitle": "Click any farm to view detailed analytics",
+    "noFarms": "No farms registered yet."
+  },
+  "weather": {
+    "title": "Weather Forecast",
+    "subtitle": "7-day forecast with agronomic risk indicators",
+    "selectFarm": "Select Farm"
+  },
+  "insights": {
+    "title": "AI Insights",
+    "subtitle": "Recommendations from Vision, Forecaster & LLM modules",
+    "filterAll": "All",
+    "noInsights": "No insights found for the selected filter.",
+    "sendSMS": "Send SMS"
+  },
+  "alerts": {
+    "title": "Alerts & SMS",
+    "subtitle": "Monitor alerts and send SMS notifications to farmers",
+    "sentToday": "Sent Today",
+    "delivered": "Delivered",
+    "failed": "Failed",
+    "pending": "Pending",
+    "composeSMS": "Compose SMS Alert",
+    "sendToFarmer": "Send to Farmer",
+    "allFarms": "All Farms",
+    "refresh": "Refresh",
+    "liveAlertFeed": "Live Alert Feed",
+    "noAlerts": "No alerts found."
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "empty": "No data available",
+    "logout": "Log out",
+    "language": "Language",
+    "save": "Save",
+    "cancel": "Cancel",
+    "next": "Next →",
+    "back": "Back",
+    "allRegistered": "All registered",
+    "withinRange": "Within range",
+    "noAlerts": "No alerts",
+    "criticalCount": "critical"
+  },
+  "onboarding": {
+    "chooseLanguage": "Choose your language",
+    "unitPreferences": "Unit Preferences",
+    "notifications": "Notification Preferences",
+    "temperature": "Temperature",
+    "area": "Area",
+    "rainfall": "Rainfall",
+    "smsAlerts": "SMS alerts",
+    "emailDigest": "Email digest",
+    "pushNotifications": "Push notifications",
+    "smsFrequency": "SMS frequency",
+    "daily": "Daily",
+    "onAlertOnly": "On alert only",
+    "enterDashboard": "Enter Dashboard →",
+    "saveAndContinue": "Save & continue →"
+  }
+}
