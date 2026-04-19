@@ -49,33 +49,42 @@ pyrightconfig.json
 
 # ── Jupyter / IPython ────────────────────────────────────────
 .ipynb_checkpoints/
-*.ipynb
+# *.ipynb  <-- Removed to track development notebooks
 
 # ── Databases / Storage ──────────────────────────────────────
 *.db
 *.sqlite
 *.sqlite3
+agri.db
+agri.db-journal
 dump.rdb
 *.rdb
 appendonly.aof
 docker/data/
 
-# ── ML Models / Data ─────────────────────────────────────────
-model_weights/
-*.pth
-*.h5
-*.pkl
-*.pb
-*.onnx
-data/
+# ── Data & Satellite Imagery ──────────────────────────────────
+data/raw/
+data/processed/
+data/satellite_tiles/
+!data/sample/
 !data/.gitkeep
 
-# ── Logs ─────────────────────────────────────────────────────
-*.log
-logs/
+# ── ML Models & Artifacts ─────────────────────────────────────
+mlruns/
+model_weights/
+models/**/*.h5
+models/**/*.pth
+models/**/*.bin
+models/**/*.pt
+models/**/*.onnx
+models/**/*.tflite
+artifacts/
+.dvc/config.local
 
-# ── Frontend / Web ───────────────────────────────────────────
+# ── Frontend (React/Vite/Next.js) ──────────────────────────────
 node_modules/
+frontend/dashboard/dist/
+frontend/dashboard/build/
 .next/
 .nuxt/
 .vercel/
@@ -83,6 +92,16 @@ node_modules/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+.eslintcache
+*.tsbuildinfo
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Project Specifics ────────────────────────────────────────
+test_outputs/
+.python-version
 
 # ── IDE / Editor ─────────────────────────────────────────────
 .vscode/
