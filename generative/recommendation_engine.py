@@ -80,6 +80,31 @@ class RecommendationEngine:
             log.warning("LLM generation failed: %s — using fallback text.", exc)
             return fallback
 
+    @staticmethod
+    def _coerce_vision_analysis(vision_analysis: Any) -> Optional[Dict]:
+        """
+        Normalise vision_analysis to a plain dict regardless of whether it is a
+        VisionAnalysis dataclass, a satellite_vision_node dict, or None.
+        """
+        if vision_analysis is None:
+            return None
+        if isinstance(vision_analysis, dict):
+            return vision_analysis
+        # Assume VisionAnalysis (or any) dataclass — convert via __dict__
+        try:
+            import dataclasses
+            return dataclasses.asdict(vision_analysis)
+        except Exception:
+            # Last resort: attribute-based extraction
+            return {
+                "likely_cause": getattr(vision_analysis, "pest_type", "unknown"),
+                "stressed_zone_pct": getattr(vision_analysis, "affected_area_pct", 0.0),
+                "health_score": getattr(vision_analysis, "health_score", 50),
+                "pest_detected": getattr(vision_analysis, "pest_detected", False),
+                "confidence": getattr(vision_analysis, "pest_confidence", 0.0),
+                "agronomist_note": getattr(vision_analysis, "recommended_action", ""),
+            }
+
     def generate_full_advisory(
         self,
         farm_id: str,
@@ -89,7 +114,7 @@ class RecommendationEngine:
         irrigation_schedule: Any,      # IrrigationSchedule dataclass
         yield_forecast: Any,           # YieldForecast dataclass
         feature_vector: Any,           # FeatureVector dataclass
-        vision_analysis: Optional[Dict] = None,
+        vision_analysis: Any = None,   # VisionAnalysis dataclass OR dict OR None
     ) -> FarmRecommendation:
         """
         Main entry point: generates the complete farm advisory.
@@ -106,6 +131,9 @@ class RecommendationEngine:
         vision_analysis : dict | None — from satellite_vision_node
         """
         log.info("Generating full advisory for farm=%s crop=%s", farm_id, crop_type)
+
+        # Normalise vision_analysis to a plain dict for prompt builders
+        vision_dict = self._coerce_vision_analysis(vision_analysis)
 
         # --- Build data dicts for prompts ---
         growth_stage = feature_vector.crop_growth_stage if feature_vector else "unknown"
@@ -137,8 +165,8 @@ class RecommendationEngine:
         if feature_vector:
             pest_data = {
                 "pest_risk_score": feature_vector.pest_risk_score,
-                "likely_cause": (vision_analysis or {}).get("likely_cause", "unknown"),
-                "stressed_zone_pct": (vision_analysis or {}).get("stressed_zone_pct", 0.0),
+                "likely_cause": (vision_dict or {}).get("likely_cause", "unknown"),
+                "stressed_zone_pct": (vision_dict or {}).get("stressed_zone_pct", 0.0),
                 "growth_stage": growth_stage,
             }
 
@@ -155,7 +183,7 @@ class RecommendationEngine:
             irrigation_data=irr_data,
             yield_data=yld_data,
             pest_data=pest_data,
-            vision_analysis=vision_analysis,
+            vision_analysis=vision_dict,  # always a dict for prompt builder
         )
 
         irrigation_advice = self._safe_generate(irr_system, irr_user, "Irrigation data unavailable.")

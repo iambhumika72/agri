@@ -41,13 +41,17 @@ def historical_db_node(state: Any) -> Any:
     from preprocessing.historical_feature_extractor import HistoricalFeatureExtractor
     from state import HistoricalContext
 
-    farm_id: str = getattr(state, "farm_id", "")
+    farm_id: str = getattr(state, "farm_id", "") if not isinstance(state, dict) else state.get("farm_id", "")
     logger.info("historical_db_node started for farm_id=%s", farm_id)
 
     if not farm_id:
         logger.error("historical_db_node received empty farm_id — aborting node.")
-        state.add_error("historical_db_node", "Empty farm_id provided.")
-        state.historical = _degraded_context(farm_id)
+        if isinstance(state, dict):
+            state["errors"] = state.get("errors", []) + ["historical_db_node: Empty farm_id provided."]
+            state["historical"] = _degraded_context(farm_id)
+        else:
+            state.add_error("historical_db_node", "Empty farm_id provided.")
+            state.historical = _degraded_context(farm_id)
         return state
 
     try:
@@ -78,15 +82,26 @@ def historical_db_node(state: Any) -> Any:
         soil_deficiencies = llm_summary.get("soil_deficiencies", [])
         irr_efficiency = llm_summary.get("irrigation_efficiency")
 
-        state.historical = HistoricalContext(
-            farm_id=farm_id,
-            yield_history=yield_history,
-            pest_risk_score=pest_risk,
-            soil_deficiencies=soil_deficiencies,
-            irrigation_efficiency=irr_efficiency,
-            farm_summary=llm_summary,
-            last_updated=datetime.utcnow(),
-        )
+        if isinstance(state, dict):
+            state["historical"] = HistoricalContext(
+                farm_id=farm_id,
+                yield_history=yield_history,
+                pest_risk_score=pest_risk,
+                soil_deficiencies=soil_deficiencies,
+                irrigation_efficiency=irr_efficiency,
+                farm_summary=llm_summary,
+                last_updated=datetime.utcnow(),
+            )
+        else:
+            state.historical = HistoricalContext(
+                farm_id=farm_id,
+                yield_history=yield_history,
+                pest_risk_score=pest_risk,
+                soil_deficiencies=soil_deficiencies,
+                irrigation_efficiency=irr_efficiency,
+                farm_summary=llm_summary,
+                last_updated=datetime.utcnow(),
+            )
         logger.info(
             "historical_db_node completed — pest_risk=%.3f deficiencies=%s",
             pest_risk or 0.0,
@@ -97,8 +112,12 @@ def historical_db_node(state: Any) -> Any:
         logger.warning(
             "historical_db_node: feature extraction failed (%s) — degraded mode.", exc
         )
-        state.add_error("historical_db_node", f"Feature extraction failed: {exc}")
-        state.historical = _degraded_context(farm_id)
+        if isinstance(state, dict):
+            state["errors"] = state.get("errors", []) + [f"historical_db_node: Feature extraction failed: {exc}"]
+            state["historical"] = _degraded_context(farm_id)
+        else:
+            state.add_error("historical_db_node", f"Feature extraction failed: {exc}")
+            state.historical = _degraded_context(farm_id)
     finally:
         db.close()
 

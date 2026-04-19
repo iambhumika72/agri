@@ -10,7 +10,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Optional, List
+from models.schemas import VisionAnalysis, PatchAnalysis, PestCase, TreatmentPlan
 
 
 # ---------------------------------------------------------------------------
@@ -99,6 +100,23 @@ class AgriState:
     iot_sensors: Optional[dict] = None  # placeholder
     weather: Optional[dict] = None      # placeholder
     farmer_sms: Optional[dict] = None   # placeholder
+
+    # Vision and Pest Analysis
+    vision_analysis: Optional[VisionAnalysis] = None
+    patch_analyses: List[PatchAnalysis] = field(default_factory=list)
+    health_map_path: Optional[str] = None
+    pest_cases: List[PestCase] = field(default_factory=list)
+    treatment_plan: Optional[TreatmentPlan] = None
+
+    # Forecasting results
+    irrigation_schedule: Optional[Any] = None
+    yield_forecast: Optional[Any] = None
+    forecast_model_used: Optional[str] = None
+    feature_vector: Optional[Any] = None
+    aligned_df: Optional[Any] = None
+
+    # Final Recommendation
+    full_advisory: Optional[Any] = None
 
     # Pipeline metadata
     pipeline_run_id: str = ""

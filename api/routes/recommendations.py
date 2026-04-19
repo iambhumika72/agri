@@ -52,6 +52,29 @@ class RecommendationResponse(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def _extract_recommendation(final_state):
+    """
+    Safely extract the FarmRecommendation object from pipeline final_state.
+
+    LangGraph may return the state as an AgriState dataclass or as a raw dict
+    depending on the version. This helper handles both forms.
+
+    Returns (FarmRecommendation | None, model_used: str)
+    """
+    if isinstance(final_state, dict):
+        advisory_obj = final_state.get("full_advisory")
+        model_used = final_state.get("forecast_model_used") or "Gemini 2.0 Flash"
+    else:
+        advisory_obj = getattr(final_state, "full_advisory", None)
+        model_used = getattr(final_state, "forecast_model_used", None) or "Gemini 2.0 Flash"
+
+    return advisory_obj, model_used
+
+
+# ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
 
@@ -59,90 +82,72 @@ class RecommendationResponse(BaseModel):
 async def generate_recommendation(request: RecommendationRequest):
     """
     Generates an AI-powered farm advisory synthesized from all available data.
+
+    Runs the full AgriSense LangGraph pipeline (historical → forecast →
+    vision → recommendation) and returns structured domain advisories.
     """
     log.info("Generating recommendation for farm=%s crop=%s", request.farm_id, request.crop_type)
 
     try:
-        from generative.recommendation_engine import RecommendationEngine
-        from generative.multilingual import translate_advisory, translate_sms
-        from models.schemas import IrrigationSchedule, YieldForecast
-        from preprocessing.schemas import FeatureVector
-        from ingestion.farmer_input_ingestion import FarmerInputIngester
+        from nodes.orchestrator import AgriSensePipeline
+        from generative.multilingual import translate_advisory
 
-        engine = RecommendationEngine()
-        
-        # If context is missing, we try to build a minimal one from history
-        if not request.farm_context:
-            ingester = FarmerInputIngester()
-            history = await ingester.fetch_farmer_history(request.farm_id, limit=5)
-            pest_summary = ", ".join([f"{h['observed_issue']} ({h['severity']})" for h in history if h.get("observed_issue")])
-            request.farm_context = (
-                f"Farm ID: {request.farm_id}\n"
-                f"Crop: {request.crop_type} | Season: {request.season}\n"
-                f"Recent Observations: {pest_summary or 'None'}\n"
-                f"Current Moisture: {request.soil_moisture or '35.0'}%\n"
+        pipeline = AgriSensePipeline()
+        final_state = await pipeline.run(farm_id=request.farm_id)
+
+        # Unwrap the FarmRecommendation object from AgriState
+        recommendation, model_used = _extract_recommendation(final_state)
+
+        if recommendation is None:
+            raise ValueError("Pipeline failed to generate an advisory — no full_advisory in state.")
+
+        # `recommendation` here is a FarmRecommendation dataclass.
+        # If somehow the state stored a raw string (fallback), handle gracefully.
+        if isinstance(recommendation, str):
+            # Degraded path: advisory is a plain string from an error fallback
+            full_advisory_text = recommendation
+            return RecommendationResponse(
+                farm_id=request.farm_id,
+                crop_type=request.crop_type,
+                language=request.language,
+                generated_at=datetime.utcnow(),
+                full_advisory=full_advisory_text,
+                irrigation_advice="See full advisory.",
+                yield_advice="See full advisory.",
+                pest_advice="See full advisory.",
+                sms_message=None,
+                model_used=model_used,
+                confidence=0.0,
             )
 
-        # Prepare structured data for the engine
-        irr_schedule = IrrigationSchedule(
-            farm_id=request.farm_id,
-            total_water_needed_liters=0,
-            confidence=0.8,
-            schedule=[]
-        )
-        
-        yield_forecast = YieldForecast(
-            farm_id=request.farm_id,
-            crop_type=request.crop_type,
-            predicted_yield=request.predicted_yield or 0.0,
-            yield_lower=0.0,
-            yield_upper=0.0,
-            key_drivers=["History", "Weather"]
-        )
-        
-        fv = FeatureVector(
-            farm_id=request.farm_id,
-            feature_timestamp=datetime.utcnow(),
-            crop_growth_stage="vegetative",
-            pest_risk_score=request.pest_risk or 0.1,
-            irrigation_need_score=request.irrigation_score or 5.0,
-            ndvi_trend=0.01,
-            vegetation_zone="healthy",
-            soil_moisture_7d_avg=request.soil_moisture or 35.0
-        )
+        # Happy path: FarmRecommendation dataclass
+        full_advisory_text = recommendation.full_advisory
 
-        recommendation = engine.generate_full_advisory(
-            farm_id=request.farm_id,
-            crop_type=request.crop_type,
-            season=request.season,
-            farm_context=request.farm_context,
-            irrigation_schedule=irr_schedule,
-            yield_forecast=yield_forecast,
-            feature_vector=fv,
-            vision_analysis=None,
-        )
-
-        # Translation
-        full_advisory = recommendation.full_advisory
+        # Translation (non-English requests)
         if request.language != "en":
-            full_advisory = translate_advisory(full_advisory, request.language)
+            try:
+                full_advisory_text = translate_advisory(full_advisory_text, request.language)
+            except Exception as te:
+                log.warning("Translation to '%s' failed: %s — returning English.", request.language, te)
 
         return RecommendationResponse(
             farm_id=request.farm_id,
             crop_type=request.crop_type,
             language=request.language,
             generated_at=datetime.utcnow(),
-            full_advisory=full_advisory,
+            full_advisory=full_advisory_text,
             irrigation_advice=recommendation.irrigation_advice,
             yield_advice=recommendation.yield_advice,
             pest_advice=recommendation.pest_advice,
             sms_message=recommendation.sms_message if request.include_sms else None,
-            model_used=recommendation.model_used,
+            model_used=recommendation.model_used or model_used,
             confidence=recommendation.confidence,
         )
 
     except EnvironmentError as e:
         raise HTTPException(status_code=503, detail=f"Gemini API key not configured: {str(e)}")
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
         log.error("Recommendation generation failed: %s", str(e), exc_info=True)
         raise HTTPException(status_code=500, detail=f"Advisory generation failed: {str(e)}")

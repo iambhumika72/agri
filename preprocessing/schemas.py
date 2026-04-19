@@ -27,6 +27,7 @@ class ChangeResult:
     severity: str
     alert_zone_pct: float
     delta_array: np.ndarray
+    alert_mask: np.ndarray
     geojson_path: str
 
 @dataclass

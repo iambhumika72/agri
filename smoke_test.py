@@ -242,6 +242,55 @@ def _vision_fallback():
 
 check("Satellite vision node (graceful fallback)", _vision_fallback)
 
+def _vision_node_graceful():
+    """vision_node must degrade gracefully when no satellite image is available."""
+    from nodes.vision_node import vision_node
+    from state import AgriState
+    state = AgriState(farm_id="SMOKE_VISION")
+    # satellite missing image_path → node should add error and return
+    state.satellite = {"false_color_png_path": "", "ndvi_mean": 0.45, "ndvi_std": 0.05}
+    result = vision_node(state)
+    assert len(result.errors) > 0, "Expected at least one error for missing image"
+    return f"errors={len(result.errors)} vision_analysis={result.vision_analysis is None}"
+
+check("Vision node (graceful degradation — no image)", _vision_node_graceful)
+
+def _orchestrator_graph_compile():
+    """Ensure the LangGraph pipeline compiles without errors."""
+    from nodes.orchestrator import create_agrisense_graph
+    graph = create_agrisense_graph()
+    assert graph is not None
+    return "graph compiled OK"
+
+check("Orchestrator graph compilation", _orchestrator_graph_compile)
+
+def _recommendation_engine_vision_coercion():
+    """RecommendationEngine._coerce_vision_analysis must handle dataclass and dict."""
+    from generative.recommendation_engine import RecommendationEngine
+    from models.schemas import VisionAnalysis
+    engine = RecommendationEngine()
+    # Test with VisionAnalysis dataclass
+    va = VisionAnalysis(
+        farm_id="F1", image_path="/tmp/img.png",
+        health_score=72, crop_health_status="good",
+        pest_detected=True, pest_type="aphids",
+        pest_confidence=0.85, affected_area_pct=12.5,
+        growth_stage_visual="vegetative", stress_pattern="patchy",
+        urgency_level="within_3_days", visual_evidence="Yellow patches visible",
+        recommended_action="Apply neem oil spray",
+    )
+    result_dc = engine._coerce_vision_analysis(va)
+    assert isinstance(result_dc, dict), "Dataclass coercion must return dict"
+    assert "pest_type" in result_dc, "Dataclass coercion must include pest_type"
+    # Test with plain dict
+    result_d = engine._coerce_vision_analysis({"pest_type": "aphids", "health_score": 80})
+    assert isinstance(result_d, dict), "Dict coercion must return dict"
+    # Test with None
+    assert engine._coerce_vision_analysis(None) is None
+    return f"dataclass_keys={len(result_dc)} dict_keys={len(result_d)} none=OK"
+
+check("RecommendationEngine vision_analysis coercion", _recommendation_engine_vision_coercion)
+
 # ══════════════════════════════════════════════════════════════
 # 5. GENERATIVE
 # ══════════════════════════════════════════════════════════════
@@ -376,9 +425,25 @@ def _alerts_route():
 check("Alerts route", _alerts_route)
 
 def _recommendations_route():
-    from api.routes.recommendations import router
+    from api.routes.recommendations import router, _extract_recommendation
     paths = [r.path for r in router.routes]
-    return f"routes={paths}"
+    # Verify _extract_recommendation handles dict and object forms
+    class _FakeRec:
+        full_advisory = "test advisory"
+        irrigation_advice = "water daily"
+        yield_advice = "good season"
+        pest_advice = "no pests"
+        sms_message = "SMS text"
+        model_used = "gemini-test"
+        confidence = 0.9
+    class _FakeState:
+        full_advisory = _FakeRec()
+        forecast_model_used = "prophet"
+    rec_obj, model_obj = _extract_recommendation(_FakeState())
+    assert rec_obj is not None and hasattr(rec_obj, "full_advisory")
+    rec_dict, model_dict = _extract_recommendation({"full_advisory": _FakeRec(), "forecast_model_used": "lstm"})
+    assert rec_dict is not None
+    return f"routes={paths} extraction_ok=True"
 
 check("Recommendations route", _recommendations_route)
 

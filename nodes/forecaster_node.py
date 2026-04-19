@@ -35,12 +35,17 @@ def forecaster_node(state: Dict[str, Any]) -> Dict[str, Any]:
     start_time = time.time()
     
     # 1. Extraction from state
-    aligned_df = state.get("aligned_df")
-    feature_vector = state.get("feature_vector") or _SafeFeatureVector()
-    satellite = state.get("satellite")
-    farm_metadata = state.get("farm_metadata", {})
-    farm_id = farm_metadata.get("farm_id", "unknown_farm")
-    crop_type = farm_metadata.get("crop_type", "Wheat")
+    if isinstance(state, dict):
+        aligned_df = state.get("aligned_df")
+        feature_vector = state.get("feature_vector") or _SafeFeatureVector()
+        farm_metadata = state.get("farm_metadata", {})
+        farm_id = farm_metadata.get("farm_id", "unknown_farm")
+        crop_type = farm_metadata.get("crop_type", "Wheat")
+    else:
+        aligned_df = getattr(state, "aligned_df", None)
+        feature_vector = getattr(state, "feature_vector", None) or _SafeFeatureVector()
+        farm_id = getattr(state, "farm_id", "unknown_farm")
+        crop_type = "Wheat" # Default if not in dataclass
     
     if aligned_df is None or aligned_df.empty:
         log.error(f"Aligned DataFrame missing in state for farm {farm_id}. Skipping forecast.")
@@ -93,9 +98,14 @@ def forecaster_node(state: Dict[str, Any]) -> Dict[str, Any]:
                 log.warning(f"Could not generate ensemble yield forecast: {str(e)}")
 
         # 5. Writing to state
-        state["irrigation_schedule"] = irrigation_schedule
-        state["yield_forecast"] = yield_forecast
-        state["forecast_model_used"] = model_mode
+        if isinstance(state, dict):
+            state["irrigation_schedule"] = irrigation_schedule
+            state["yield_forecast"] = yield_forecast
+            state["forecast_model_used"] = model_mode
+        else:
+            state.irrigation_schedule = irrigation_schedule
+            state.yield_forecast = yield_forecast
+            state.forecast_model_used = model_mode
         
     except Exception as e:
         log.error(f"Forecasting pipeline failed for {farm_id}: {str(e)}", exc_info=True)
