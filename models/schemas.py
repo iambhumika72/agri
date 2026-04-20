@@ -109,6 +109,32 @@ class TreatmentPlan:
     treatment_steps: List[str]
     estimated_cost_inr: str
 
+@dataclass
+class PlantPestResult:
+    farm_id: Optional[str]
+    image_filename: str
+    preprocessing_metadata: dict      # from OpenCV pipeline
+    vision_analysis: VisionAnalysis   # reuse existing dataclass
+    similar_cases: List[PestCase]     # reuse existing dataclass
+    treatment_plan: TreatmentPlan     # reuse existing dataclass
+    confidence_label: str             # human readable
+    final_confidence_adjusted: float  # avg of Gemini + FAISS score
+    error: Optional[str]
+    analysis_timestamp: datetime = field(default_factory=datetime.utcnow)
+
+def get_confidence_label(confidence: float) -> str:
+    """Returns a human-readable label for the detection confidence."""
+    if confidence >= 0.85:
+        return "Very High Confidence"
+    elif confidence >= 0.70:
+        return "High Confidence"
+    elif confidence >= 0.50:
+        return "Moderate Confidence — Consider Expert Advice"
+    elif confidence >= 0.30:
+        return "Low Confidence — Please Retake Photo"
+    else:
+        return "Unable to Identify — Contact Local Agriculture Officer"
+
 if __name__ == "__main__":
     # Smoke test for schemas
     now = datetime.utcnow()

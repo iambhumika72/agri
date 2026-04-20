@@ -244,6 +244,149 @@ class VisionModel:
             token_count=token_count
         )
 
+    def build_plant_photo_prompt(self, preprocessing_metadata: dict, farm_context: dict | None) -> str:
+        """Constructs a specialized prompt for close-up plant photo analysis."""
+        lz = preprocessing_metadata.get("lesion_zones", {})
+        dominant_symptom = preprocessing_metadata.get("dominant_symptom", "none")
+        
+        context_str = ""
+        if farm_context:
+            crop = farm_context.get("crop_name", "unknown")
+            stage = farm_context.get("growth_stage", "unknown")
+            context_str = f"- Reported Crop: {crop} | Growth Stage: {stage}"
+
+        return f"""You are an expert plant pathologist and agricultural extension officer
+ specializing in crops grown by small-scale farmers in India (wheat, rice,
+ cotton, sugarcane, maize, mustard, potato, tomato, onion, chilli).
+
+ A farmer has uploaded a close-up photo of their plant. OpenCV analysis
+ has already detected the following in this image:
+ - Dominant visible symptom: {dominant_symptom}
+ - Brown/yellow affected area: {lz.get('brown_yellow_pct', 0.0):.1f}%
+ - White powdery patches: {lz.get('white_patch_pct', 0.0):.1f}%
+ - Necrotic zones: {lz.get('necrotic_pct', 0.0):.1f}%
+ - Total affected leaf area: {lz.get('total_affected_pct', 0.0):.1f}%
+ - Distinct lesion blobs detected: {lz.get('lesion_blob_count', 0)}
+ {context_str}
+
+ Use this OpenCV data to guide your visual analysis, but trust your own
+ visual assessment of the image above the OpenCV numbers if they conflict.
+
+ Return ONLY a valid JSON object with exactly these keys — no markdown,
+ no explanation outside the JSON:
+ {{
+   "pest_identified": bool,
+   "pest_name": str,
+     (one of: aphids | stem_borer | whitefly | locusts | armyworm |
+      fungal_blight | bacterial_wilt | nutrient_deficiency_nitrogen |
+      nutrient_deficiency_iron | drought_stress | waterlogging |
+      powdery_mildew | leaf_curl_virus | root_rot | healthy | unknown)
+   "common_name": str,
+     (farmer-friendly name e.g. 'Leaf Eating Caterpillar')
+   "affected_plant_part": str,
+     (one of: leaf | stem | root | fruit | flower | whole_plant | unknown)
+   "symptoms_observed": str,
+     (2-3 sentences: exactly what is visible in THIS photo —
+      mention colors, patterns, textures you can see)
+   "confidence": float,
+     (0.0 to 1.0)
+   "confidence_reason": str,
+     (one sentence: why confidence is high or low based on image clarity
+      and symptom visibility)
+   "severity": str,
+     (one of: early | moderate | severe | critical)
+   "severity_explanation": str,
+     (one sentence: what in the image indicates this severity)
+   "spread_risk": str,
+     (one of: low | medium | high)
+   "organic_treatment": str,
+     (specific treatment with quantities and method — max 30 words)
+   "chemical_treatment": str,
+     (specific pesticide, concentration, application — max 25 words)
+   "act_within_days": int,
+   "preventive_measure": str,
+     (one simple preventive action for future — max 20 words)
+   "photo_quality_sufficient": bool,
+   "retake_suggestion": str
+     (if photo_quality_sufficient=False: how to retake better photo.
+      If True: empty string)
+ }}"""
+
+    def analyze_farmer_photo(
+        self, 
+        image_path: str, 
+        preprocessing_metadata: dict, 
+        farm_context: dict | None = None
+    ) -> VisionAnalysis:
+        """Call Gemini for close-up plant photo analysis."""
+        prompt = self.build_plant_photo_prompt(preprocessing_metadata, farm_context)
+        image_base64 = self.encode_image(image_path)
+        
+        start_time = datetime.utcnow()
+        image_part = {"mime_type": "image/png", "data": image_base64}
+
+        def _call_gemini(retry_reminder: str = ""):
+            return self.model.generate_content(
+                [image_part, f"{prompt}\n{retry_reminder}"],
+                generation_config=genai.types.GenerationConfig(
+                    temperature=self.config["temperature"],
+                    max_output_tokens=self.config["max_output_tokens"]
+                )
+            )
+
+        try:
+            response = _call_gemini()
+            text = response.text.strip()
+            if text.startswith("```"):
+                text = text.split("json")[-1].split("```")[0].strip()
+            analysis_dict = json.loads(text)
+        except Exception as e:
+            log.warning("Gemini parse failed, retrying: %s", e)
+            try:
+                response = _call_gemini("IMPORTANT: Return ONLY valid JSON.")
+                text = response.text.strip()
+                if text.startswith("```"):
+                    text = text.split("json")[-1].split("```")[0].strip()
+                analysis_dict = json.loads(text)
+            except Exception as final_e:
+                log.error("Gemini analysis failed: %s", final_e)
+                latency = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+                return VisionAnalysis(
+                    farm_id=farm_context.get("farm_id", "unknown") if farm_context else "unknown",
+                    image_path=image_path, health_score=0, crop_health_status="critical",
+                    pest_detected=False, pest_type="unknown", pest_confidence=0.0,
+                    affected_area_pct=0.0, growth_stage_visual="unknown", stress_pattern="healthy",
+                    urgency_level="none", visual_evidence=f"API Error: {str(final_e)[:50]}",
+                    recommended_action="Please check manually.", gemini_latency_ms=latency
+                )
+
+        latency = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+        token_count = getattr(response, 'usage_metadata', {}).get('total_token_count', 0)
+        
+        # Map to VisionAnalysis schema
+        pest_detected = analysis_dict.get("pest_identified", False)
+        # Urgency mapping based on severity
+        severity = analysis_dict.get("severity", "moderate")
+        urgency = "immediate" if severity in ["severe", "critical"] else "within_3_days"
+
+        return VisionAnalysis(
+            farm_id=farm_context.get("farm_id", "unknown") if farm_context else "unknown",
+            image_path=image_path,
+            health_score=100 if analysis_dict.get("pest_name") == "healthy" else 50,
+            crop_health_status="excellent" if analysis_dict.get("pest_name") == "healthy" else "poor",
+            pest_detected=pest_detected,
+            pest_type=analysis_dict.get("pest_name", "unknown"),
+            pest_confidence=analysis_dict.get("confidence", 0.0),
+            affected_area_pct=preprocessing_metadata.get("lesion_zones", {}).get("total_affected_pct", 0.0),
+            growth_stage_visual="unknown",
+            stress_pattern="patchy",
+            urgency_level=urgency,
+            visual_evidence=analysis_dict.get("symptoms_observed", ""),
+            recommended_action=analysis_dict.get("organic_treatment", ""),
+            gemini_latency_ms=latency,
+            token_count=token_count
+        )
+
     def detect_with_patch_analysis(
         self,
         ndvi_array: np.ndarray,
