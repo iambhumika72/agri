@@ -33,6 +33,7 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, relationship
+from sqlalchemy.dialects.postgresql import UUID
 
 
 # ---------------------------------------------------------------------------
@@ -330,6 +331,52 @@ class SoilHealth(Base):
             "potassium_ppm": self.potassium_ppm,
             "organic_matter_pct": self.organic_matter_pct,
             "moisture_pct": self.moisture_pct,
+        }
+
+
+# ---------------------------------------------------------------------------
+# MandiPrice
+# ---------------------------------------------------------------------------
+class MandiPrice(Base):
+    """Historical commodity prices from Agmarknet."""
+
+    __tablename__ = "mandi_prices"
+
+    price_id: uuid.UUID = Column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    state: str = Column(String(100), nullable=False)
+    district: str = Column(String(100), nullable=False)
+    market: str = Column(String(100), nullable=False)
+    commodity: str = Column(String(100), nullable=False)
+    variety: str = Column(String(100), nullable=False)
+    arrival_date: date = Column(Date, nullable=False)
+    min_price: float = Column(Double, nullable=False)
+    max_price: float = Column(Double, nullable=False)
+    modal_price: float = Column(Double, nullable=False)
+    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (
+        CheckConstraint("min_price >= 0",   name="chk_mandi_min"),
+        CheckConstraint("max_price >= 0",   name="chk_mandi_max"),
+        CheckConstraint("modal_price >= 0", name="chk_mandi_modal"),
+        Index("idx_mandi_lookup", "state", "district", "commodity"),
+        Index("idx_mandi_date", "arrival_date"),
+    )
+
+    def to_dict(self) -> dict:
+        return {
+            "price_id": str(self.price_id),
+            "state": self.state,
+            "district": self.district,
+            "market": self.market,
+            "commodity": self.commodity,
+            "variety": self.variety,
+            "arrival_date": self.arrival_date.isoformat() if self.arrival_date else None,
+            "min_price": self.min_price,
+            "max_price": self.max_price,
+            "modal_price": self.modal_price,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
         }
 
 

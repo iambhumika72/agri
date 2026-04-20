@@ -73,6 +73,28 @@ class HistoricalContext:
 
 
 # ---------------------------------------------------------------------------
+# Profit context
+# ---------------------------------------------------------------------------
+@dataclass
+class ProfitContext:
+    """Holds results from the crop_profit_node."""
+    field_profile: dict = field(default_factory=dict)
+    suitability_scores: dict = field(default_factory=dict)
+    profit_analyses: list[dict] = field(default_factory=list)
+    profit_boost_advice: str = ""
+    last_updated: datetime = field(default_factory=datetime.utcnow)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "field_profile": self.field_profile,
+            "suitability_scores": self.suitability_scores,
+            "profit_analyses": self.profit_analyses,
+            "profit_boost_advice": self.profit_boost_advice,
+            "last_updated": self.last_updated.isoformat()
+        }
+
+
+# ---------------------------------------------------------------------------
 # Unified pipeline state — add other data-source contexts as needed
 # ---------------------------------------------------------------------------
 @dataclass
@@ -100,6 +122,7 @@ class AgriState:
     iot_sensors: Optional[dict] = None  # placeholder
     weather: Optional[dict] = None      # placeholder
     farmer_sms: Optional[dict] = None   # placeholder
+    profit: Optional[ProfitContext] = None
 
     # Vision and Pest Analysis
     vision_analysis: Optional[VisionAnalysis] = None

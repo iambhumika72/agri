@@ -39,6 +39,22 @@ class YieldForecast:
     key_drivers: List[str]
     model_used: str
 
+
+@dataclass
+class PriceForecast:
+    """Projected market prices for a commodity."""
+    state: str
+    district: str
+    commodity: str
+    predicted_modal_price: float
+    price_lower: float
+    price_upper: float
+    forecast_date: datetime
+    confidence_interval: float
+    trend_component: float
+    seasonal_component: float
+    model_used: str = "prophet"
+
 @dataclass
 class LSTMPrediction:
     """Raw predictions from the LSTM model."""

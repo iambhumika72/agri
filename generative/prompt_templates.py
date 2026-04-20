@@ -139,6 +139,38 @@ SMS_TEMPLATE = Template(
     "Reply HELP for full report."
 )
 
+# ---------------------------------------------------------------------------
+# Profit Boost Advisor Prompt
+# ---------------------------------------------------------------------------
+
+PROFIT_BOOST_SYSTEM = (
+    "You are a Senior Agricultural Economist and Farm Business Advisor. "
+    "Your goal is to help Indian farmers maximize their ROI and net profit. "
+    "You analyze field capability, yield forecasts, and market trends to provide "
+    "strategic advice on crop selection and profit optimization."
+)
+
+PROFIT_BOOST_TEMPLATE = Template(
+    "## Field Capability Profile\n"
+    "Overall Score: $capability_score / 1.0\n"
+    "Soil health (pH: $ph, OM: $om%)\n"
+    "Climate suitability: $climate_suitability / 1.0\n"
+    "Pest pressure history: $pest_pressure / 1.0\n\n"
+    "## Financial Projections for Preferred Crop ($crop)\n"
+    "Predicted Modal Price: ₹$predicted_price / quintal\n"
+    "Predicted Yield: $predicted_yield kg/ha\n"
+    "Estimated Cost: ₹$total_cost\n"
+    "Net Profit: ₹$net_profit\n"
+    "ROI: $roi%\n\n"
+    "## Your Task\n"
+    "Based on the data above, provide a 'Profit Boost' strategy:\n"
+    "1. **Crop Suitability Analysis**: Briefly explain why $crop is a good (or risky) choice for this field.\n"
+    "2. **Specific ROI Boosters**: Suggest 3 concrete actions to increase profit (e.g., precise nutrient management, intercropping, or timing harvest).\n"
+    "3. **Market Strategy**: Suggest the best time or market to sell based on the price trend.\n"
+    "4. **Alternative recommendation**: If another crop would be more profitable for this field capability, suggest it.\n\n"
+    "Keep response under 250 words. Be practical and clear."
+)
+
 
 def build_irrigation_prompt(farm_context: str, irrigation_data: dict) -> tuple[str, str]:
     """Returns (system_prompt, user_prompt) for irrigation recommendation."""
@@ -210,6 +242,27 @@ def build_full_advisory_prompt(
         stressed_zone_pct=round(vision.get("stressed_zone_pct", 0), 1),
     )
     return FULL_ADVISORY_SYSTEM, user
+
+
+def build_profit_boost_prompt(
+    profile: dict, 
+    analysis: dict
+) -> tuple[str, str]:
+    """Returns (system_prompt, user_prompt) for profit boost advisory."""
+    user = PROFIT_BOOST_TEMPLATE.substitute(
+        capability_score=round(profile.get("overall_capability_score", 0), 2),
+        ph=profile.get("ph_level", 6.5),
+        om=profile.get("organic_matter", 2.0),
+        climate_suitability=round(profile.get("temp_suitability", 0.5), 2),
+        pest_pressure=round(profile.get("historical_pest_pressure", 0), 2),
+        crop=analysis.get("crop", "Unknown"),
+        predicted_price=round(analysis.get("predicted_price", 0), 2),
+        predicted_yield=round(analysis.get("predicted_yield", 0), 1),
+        total_cost=round(analysis.get("total_cost", 0), 2),
+        net_profit=round(analysis.get("net_profit", 0), 2),
+        roi=round(analysis.get("roi_pct", 0), 2),
+    )
+    return PROFIT_BOOST_SYSTEM, user
 
 
 if __name__ == "__main__":
