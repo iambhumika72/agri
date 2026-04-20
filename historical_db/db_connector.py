@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 
 # Tables that insert_record is permitted to write to
 _ALLOWED_TABLES = frozenset(
-    {"farms", "crops", "yield_records", "pest_records", "irrigation_logs", "soil_health"}
+    {"farms", "crops", "yield_records", "pest_records", "irrigation_logs", "soil_health", "mandi_prices"}
 )
 
 
@@ -325,6 +325,43 @@ class HistoricalDBConnector:
         df["farm_id"] = df["farm_id"].astype(str)
         df["log_date"] = pd.to_datetime(df["log_date"])
         return df.set_index(["farm_id", "log_date"])
+
+    def get_latest_soil_health(self, farm_id: str) -> dict:
+        """Return the most recent soil health record as a dictionary."""
+        df = self.get_soil_trend(farm_id, last_n_records=1)
+        if df.empty:
+            return {}
+        # index is (farm_id, date), reset it to get columns back
+        return df.reset_index().iloc[0].to_dict()
+
+    def fetch_mandi_prices(
+        self, state: str, district: str, commodity: str, days: int = 365
+    ) -> pd.DataFrame:
+        """Return historical mandi prices for a given region and commodity."""
+        logger.info(
+            "fetch_mandi_prices %s, %s, %s (last %d days)",
+            state, district, commodity, days
+        )
+        sql = text(
+            """
+            SELECT arrival_date as ds, modal_price as y
+            FROM mandi_prices
+            WHERE state     = :state
+              AND district  = :district
+              AND commodity = :commodity
+              AND arrival_date >= CURRENT_DATE - INTERVAL '1 day' * :days
+            ORDER BY arrival_date ASC
+            """
+        )
+        with self._get_session() as session:
+            result = session.execute(
+                sql, {"state": state, "district": district, "commodity": commodity, "days": days}
+            )
+            df = pd.DataFrame(result.fetchall(), columns=result.keys())
+        
+        if not df.empty:
+            df["ds"] = pd.to_datetime(df["ds"])
+        return df
 
     # ------------------------------------------------------------------
     # Generic insert

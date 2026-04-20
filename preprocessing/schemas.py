@@ -111,6 +111,33 @@ class FeatureValidationError(Exception):
     """Raised when the assembled feature vector contains invalid values (e.g., NaN)."""
     pass
 
+@dataclass
+class FieldCapabilityProfile:
+    """A crop-agnostic profile of the field's agricultural potential."""
+    farm_id: str
+    timestamp: datetime
+    
+    # Vegetation Health (Satellite)
+    avg_ndvi: float
+    ndvi_stability: float
+    moisture_index: float  # NDWI
+    
+    # Climatic Suitability (Weather)
+    temp_suitability: float # 0-1
+    precip_suitability: float # 0-1
+    soil_moisture_index: float # 0-1
+    
+    # Soil Health (Direct sensor/DB)
+    ph_level: float
+    organic_matter: float
+    
+    # Risk Profile
+    historical_pest_pressure: float # 0-1
+    dominant_pest_types: List[str]
+    
+    # Final Score
+    overall_capability_score: float # 0-1
+
 if __name__ == "__main__":
     # Smoke test for schemas
     now = datetime.utcnow()

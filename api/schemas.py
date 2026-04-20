@@ -51,3 +51,19 @@ class HealthResponse(BaseModel):
     version: str
     timestamp: datetime
     dependencies: dict[str, str]
+
+class ProfitAnalysisResponse(BaseModel):
+    crop: str
+    total_cost: float
+    gross_revenue: float
+    net_profit: float
+    roi_pct: float
+    break_even_price: float
+
+class CropProfitResponse(BaseModel):
+    farm_id: str
+    timestamp: datetime
+    suitability_scores: dict[str, float]
+    profit_analyses: List[ProfitAnalysisResponse]
+    profit_boost_advice: str
+    overall_capability_score: float
