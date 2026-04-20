@@ -89,7 +89,7 @@ export default function AlertsPage() {
       {farmId && !loading && alertSummary && (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatCard title="Active Critical" value={alertSummary.active_critical || 0} icon={AlertTriangle} colorClass="bg-danger-50" danger={(alertSummary.active_critical || 0) > 0} />
+            <StatCard title="Active Critical" value={alertSummary.critical_count || 0} icon={AlertTriangle} colorClass="bg-danger-50" danger={(alertSummary.critical_count || 0) > 0} />
             <StatCard title="Total Alerts" value={alertSummary.total_alerts || 0} icon={Bell} colorClass="bg-primary-50" />
             <StatCard title="Recent Count" value={alerts.length} icon={RefreshCw} colorClass="bg-teal-50" />
             <StatCard title="Farm ID" value={farmId.split('-')[0]} icon={Users} colorClass="bg-amber-50" />
@@ -133,7 +133,7 @@ export default function AlertsPage() {
                   </div>
                 ) : (
                   alerts.map((alert) => (
-                    <div key={alert.id} className="px-5 py-3.5 hover:bg-neutral-50 transition-colors">
+                    <div key={alert.alert_id} className="px-5 py-3.5 hover:bg-neutral-50 transition-colors">
                       <div className="flex items-start gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
@@ -143,10 +143,7 @@ export default function AlertsPage() {
                           <p className="text-sm text-neutral-700 leading-snug">{alert.message}</p>
                           <div className="flex items-center gap-3 mt-1.5">
                             <span className="text-xs text-neutral-400">
-                              {new Date(alert.timestamp || new Date()).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                            </span>
-                            <span className={`text-xs ${alert.is_active ? 'text-amber-500' : 'text-neutral-400'}`}>
-                              {alert.is_active ? 'Active' : 'Resolved'}
+                              {new Date(alert.triggered_at || new Date()).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                             </span>
                           </div>
                         </div>

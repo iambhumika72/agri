@@ -66,8 +66,8 @@ export default function YieldHistoryPage() {
     <div className="max-w-7xl mx-auto space-y-6 pb-24 md:pb-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <PageHeader 
-          titleKey="Yield History" 
-          descKey="Historical crop yield data for your farm." 
+          titleKey="page.yield.title" 
+          descKey="page.yield.desc" 
           icon={ChartIcon} 
         />
         <FarmSelector value={farmId} onChange={setFarmId} />

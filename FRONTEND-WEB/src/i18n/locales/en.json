@@ -42,6 +42,26 @@
     "alerts": {
       "title": "Alerts & SMS",
       "desc": "Important alerts for your farm. Send SMS reminders to farmers directly."
+    },
+    "yield": {
+      "title": "Yield History",
+      "desc": "Historical crop yield data for your farm."
+    },
+    "soil": {
+      "title": "Soil Health",
+      "desc": "Track NPK trends and soil deficiencies."
+    },
+    "pest_history": {
+      "title": "Pest History Timeline",
+      "desc": "Past pest outbreaks and severity."
+    },
+    "system_health": {
+      "title": "System Health",
+      "desc": "Live status of AgriSense backend services."
+    },
+    "pest_detect": {
+      "title": "Pest Detection",
+      "desc": "Upload a photo to detect plant diseases."
     }
   },
   "dashboard": {

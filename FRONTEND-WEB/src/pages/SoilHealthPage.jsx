@@ -62,18 +62,18 @@ export default function SoilHealthPage() {
   };
 
   const chartData = records.map(r => ({
-    date: new Date(r.recorded_date).toLocaleDateString('en-IN', { month: 'short', year: '2-digit' }),
-    N: r.nitrogen_ppm || 0,
-    P: r.phosphorus_ppm || 0,
-    K: r.potassium_ppm || 0,
+    date: new Date(r.recorded_at).toLocaleDateString('en-IN', { month: 'short', year: '2-digit' }),
+    N: r.nitrogen || 0,
+    P: r.phosphorus || 0,
+    K: r.potassium || 0,
   })).reverse();
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 pb-24 md:pb-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <PageHeader 
-          titleKey="Soil Health" 
-          descKey="Track NPK trends and soil deficiencies." 
+          titleKey="page.soil.title" 
+          descKey="page.soil.desc" 
           icon={FlaskConical} 
         />
         <FarmSelector value={farmId} onChange={setFarmId} />

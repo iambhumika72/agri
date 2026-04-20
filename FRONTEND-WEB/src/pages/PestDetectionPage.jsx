@@ -102,8 +102,8 @@ export default function PestDetectionPage() {
     <div className="max-w-4xl mx-auto space-y-6 pb-24 md:pb-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <PageHeader 
-          titleKey="Pest Detection" 
-          descKey="Upload a photo to detect plant diseases." 
+          titleKey="page.pest_detect.title" 
+          descKey="page.pest_detect.desc" 
           icon={Target} 
         />
         <FarmSelector value={farmId} onChange={setFarmId} />

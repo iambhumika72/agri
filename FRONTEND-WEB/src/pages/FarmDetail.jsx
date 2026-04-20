@@ -247,7 +247,7 @@ export default function FarmDetail() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-neutral-50 border-b border-neutral-100">
-                      {['Date', 'Alert Type', 'Message', 'Status'].map((h) => (
+                      {['Date', 'Alert Type', 'Message'].map((h) => (
                         <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">
                           {h}
                         </th>
@@ -257,7 +257,7 @@ export default function FarmDetail() {
                   <tbody className="divide-y divide-neutral-50">
                     {filteredAlerts.length === 0 ? (
                       <tr>
-                        <td colSpan={4} className="px-4 py-12 text-center">
+                        <td colSpan={3} className="px-4 py-12 text-center">
                           <div className="flex flex-col items-center gap-2 text-neutral-400">
                             <AlertTriangle size={28} />
                             <p className="text-sm">No {severityFilter !== 'all' ? severityFilter : ''} alerts for this farm.</p>
@@ -266,19 +266,14 @@ export default function FarmDetail() {
                       </tr>
                     ) : (
                       filteredAlerts.map((a) => (
-                        <tr key={a.id} className="hover:bg-neutral-50">
+                        <tr key={a.alert_id} className="hover:bg-neutral-50">
                           <td className="px-4 py-3 text-xs text-neutral-400 whitespace-nowrap">
-                            {new Date(a.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                            {new Date(a.triggered_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                           </td>
                           <td className="px-4 py-3 font-medium text-neutral-700 whitespace-nowrap">
                             <AlertBadge severity={a.severity} /> {a.alert_type}
                           </td>
                           <td className="px-4 py-3 text-neutral-600 max-w-xs truncate" title={a.message}>{a.message}</td>
-                          <td className="px-4 py-3 whitespace-nowrap">
-                            <span className={a.is_active ? 'badge-warning' : 'badge-success'}>
-                              {a.is_active ? 'Active' : 'Resolved'}
-                            </span>
-                          </td>
                         </tr>
                       ))
                     )}

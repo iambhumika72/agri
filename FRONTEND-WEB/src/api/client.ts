@@ -1,5 +1,5 @@
 // src/api/client.ts
-import {
+import type {
   PlantPestResult,
   YieldRecord,
   PestRecord,
@@ -18,7 +18,7 @@ import { API_BASE } from '../config';
  */
 export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE}${path}`;
-  const token = localStorage.getItem('auth_token');
+  const token = localStorage.getItem('krishi_token');
   
   const headers = new Headers(options?.headers || {});
   if (!headers.has('Accept')) {
@@ -235,3 +235,21 @@ export const insightsAPI = {
     }), 500));
   }
 };
+
+// ---------------------------------------------------------------------------
+// Legacy Default Export (Axios-like compatibility)
+// ---------------------------------------------------------------------------
+const legacyClient = {
+  get: <T>(path: string) => apiFetch<T>(path, { method: 'GET' }).then(data => ({ data })),
+  post: <T>(path: string, body: any) => apiFetch<T>(path, { 
+    method: 'POST', 
+    body: typeof body === 'string' ? body : JSON.stringify(body) 
+  }).then(data => ({ data })),
+  patch: <T>(path: string, body: any) => apiFetch<T>(path, { 
+    method: 'PATCH', 
+    body: typeof body === 'string' ? body : JSON.stringify(body) 
+  }).then(data => ({ data })),
+  delete: <T>(path: string) => apiFetch<T>(path, { method: 'DELETE' }).then(data => ({ data })),
+};
+
+export default legacyClient;
