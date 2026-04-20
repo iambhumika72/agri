@@ -353,9 +353,17 @@ class HistoricalDBConnector:
 
         logger.info("insert_record table=%s keys=%s", table_name, list(data.keys()))
 
+        # Convert UUID and date objects to strings for SQLite compatibility in text() queries
+        import uuid
+        from datetime import date
+        processed_data = {
+            k: str(v) if isinstance(v, (uuid.UUID, date)) else v 
+            for k, v in data.items()
+        }
+
         with self._get_session() as session:
             try:
-                session.execute(sql, data)
+                session.execute(sql, processed_data)
                 logger.info("insert_record succeeded for table=%s", table_name)
                 return True
             except Exception as exc:
@@ -373,6 +381,14 @@ class HistoricalDBConnector:
         with self._get_session() as session:
             result = session.execute(sql, {"fid": farm_id}).fetchone()
         return result is not None
+
+    def get_all_farms(self) -> list[dict]:
+        """Return a list of all farms registered in the system."""
+        sql = text("SELECT * FROM farms ORDER BY farmer_name")
+        with self._get_session() as session:
+            result = session.execute(sql)
+            rows = result.fetchall()
+            return [dict(row._mapping) for row in rows]
 
     # ------------------------------------------------------------------
     # Private helpers

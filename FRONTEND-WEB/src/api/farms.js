@@ -1,7 +1,7 @@
 import client from './client';
 import farmsData from '../mock/farms.json';
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 /**
  * Fetch all farms for the authenticated extension worker.
@@ -9,7 +9,7 @@ const USE_MOCK = true;
  */
 export async function getFarms() {
   if (USE_MOCK) return farmsData;
-  const { data } = await client.get('/farms');
+  const { data } = await client.get('/history/farms');
   return data;
 }
 

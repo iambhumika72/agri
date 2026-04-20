@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!farmId && farms && farms.length > 0) {
-      const firstId = farms[0].id;
+      const firstId = farms[0].farm_id;
       setFarmId(firstId);
       localStorage.setItem('krishi_farm_id', firstId);
     }

@@ -62,6 +62,7 @@ dump.rdb
 *.rdb
 appendonly.aof
 docker/data/
+/data/*.db
 
 # ─── Model artifacts (large binaries) ─────────────────────────
 # Commit only small reference models if needed.

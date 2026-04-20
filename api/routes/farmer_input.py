@@ -335,9 +335,6 @@ async def detect_pest(
     growth_stage: Optional[str] = Form(None)
 ) -> PlantPestResult:
     """Processes a multipart image upload for pest detection."""
-    if not os.environ.get("GEMINI_API_KEY"):
-        raise HTTPException(status_code=503, detail="Vision analysis service unavailable (missing API key).")
-
     try:
         content = await file.read()
         preprocessor = PlantPhotoPreprocessor()

@@ -185,6 +185,18 @@ IngestPayload = Annotated[
 # Routes
 # ---------------------------------------------------------------------------
 @router.get(
+    "/farms",
+    response_model=list[dict],
+    summary="List all farms",
+)
+def list_all_farms(
+    db: Any = Depends(get_db),
+) -> list[dict]:
+    """Returns a list of all farms for selection in the UI."""
+    return db.get_all_farms()
+
+
+@router.get(
     "/yield/{farm_id}",
     response_model=list[YieldRecordOut],
     summary="Get yield history for a farm",

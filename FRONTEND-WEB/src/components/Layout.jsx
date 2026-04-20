@@ -95,10 +95,10 @@ function SidebarContent({ onClose }) {
     { to: '/weather', icon: CloudSun, label: t('nav.weather') },
     { to: '/insights', icon: Lightbulb, label: t('nav.insights') },
     { to: '/alerts', icon: Bell, label: t('nav.alerts') },
-    { to: '/yield', icon: Leaf, label: t('page.yield') || 'Yield History' },
-    { to: '/soil', icon: Activity, label: t('page.soil') || 'Soil Health' },
-    { to: '/pest-detect', icon: Bug, label: t('page.pest_detection') || 'Pest Detection' },
-    { to: '/health', icon: Check, label: t('page.system_health') || 'System Health' },
+    { to: '/yield', icon: Leaf, label: t('page.yield.title') || 'Yield History' },
+    { to: '/soil', icon: Activity, label: t('page.soil.title') || 'Soil Health' },
+    { to: '/pest-detect', icon: Bug, label: t('page.pest_detect.title') || 'Pest Detection' },
+    { to: '/health', icon: Check, label: t('page.system_health.title') || 'System Health' },
   ];
 
   return (

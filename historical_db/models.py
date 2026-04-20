@@ -29,9 +29,9 @@ from sqlalchemy import (
     String,
     Text,
     UniqueConstraint,
+    Uuid,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, relationship
 
 
@@ -60,7 +60,7 @@ class Farm(Base):
     __tablename__ = "farms"
 
     farm_id: uuid.UUID = Column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+        Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     farmer_name: str = Column(String(120), nullable=False)
     district: str = Column(String(100), nullable=False)
@@ -113,7 +113,7 @@ class Crop(Base):
     __tablename__ = "crops"
 
     crop_id: uuid.UUID = Column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+        Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     crop_name: str = Column(String(100), nullable=False)
     crop_variety: Optional[str] = Column(String(100))
@@ -151,13 +151,13 @@ class YieldRecord(Base):
     __tablename__ = "yield_records"
 
     record_id: uuid.UUID = Column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+        Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     farm_id: uuid.UUID = Column(
-        UUID(as_uuid=True), ForeignKey("farms.farm_id", ondelete="CASCADE"), nullable=False
+        Uuid(as_uuid=True), ForeignKey("farms.farm_id", ondelete="CASCADE"), nullable=False
     )
     crop_id: uuid.UUID = Column(
-        UUID(as_uuid=True), ForeignKey("crops.crop_id", ondelete="RESTRICT"), nullable=False
+        Uuid(as_uuid=True), ForeignKey("crops.crop_id", ondelete="RESTRICT"), nullable=False
     )
     season: str = Column(SeasonTypeEnum, nullable=False)
     year: int = Column(SmallInteger, nullable=False)
@@ -199,13 +199,13 @@ class PestRecord(Base):
     __tablename__ = "pest_records"
 
     pest_id: uuid.UUID = Column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+        Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     farm_id: uuid.UUID = Column(
-        UUID(as_uuid=True), ForeignKey("farms.farm_id", ondelete="CASCADE"), nullable=False
+        Uuid(as_uuid=True), ForeignKey("farms.farm_id", ondelete="CASCADE"), nullable=False
     )
     crop_id: uuid.UUID = Column(
-        UUID(as_uuid=True), ForeignKey("crops.crop_id", ondelete="RESTRICT"), nullable=False
+        Uuid(as_uuid=True), ForeignKey("crops.crop_id", ondelete="RESTRICT"), nullable=False
     )
     pest_name: str = Column(String(120), nullable=False)
     severity: int = Column(SmallInteger, nullable=False)
@@ -253,10 +253,10 @@ class IrrigationLog(Base):
     __tablename__ = "irrigation_logs"
 
     log_id: uuid.UUID = Column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+        Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     farm_id: uuid.UUID = Column(
-        UUID(as_uuid=True), ForeignKey("farms.farm_id", ondelete="CASCADE"), nullable=False
+        Uuid(as_uuid=True), ForeignKey("farms.farm_id", ondelete="CASCADE"), nullable=False
     )
     log_date: date = Column(Date, nullable=False)
     water_used_liters: float = Column(Double, nullable=False)
@@ -293,10 +293,10 @@ class SoilHealth(Base):
     __tablename__ = "soil_health"
 
     soil_id: uuid.UUID = Column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+        Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     farm_id: uuid.UUID = Column(
-        UUID(as_uuid=True), ForeignKey("farms.farm_id", ondelete="CASCADE"), nullable=False
+        Uuid(as_uuid=True), ForeignKey("farms.farm_id", ondelete="CASCADE"), nullable=False
     )
     recorded_date: date = Column(Date, nullable=False)
     ph_level: Optional[float] = Column(Double)
