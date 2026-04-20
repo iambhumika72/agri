@@ -184,9 +184,9 @@ def test_build_alert_context():
     )
     
     # severity="high" -> non-empty
-    cr_high = ChangeResult("high", 15.0, np.array([-0.2]), "path")
+    cr_high = ChangeResult("high", 15.0, np.array([-0.2]), np.zeros((1,1)), "path")
     assert "ALERT" in build_alert_context(cr_high, fv)
     
     # severity="low" -> empty
-    cr_low = ChangeResult("low", 2.0, np.array([-0.02]), "path")
+    cr_low = ChangeResult("low", 2.0, np.array([-0.02]), np.zeros((1,1)), "path")
     assert build_alert_context(cr_low, fv) == ""

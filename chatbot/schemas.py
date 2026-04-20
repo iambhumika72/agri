@@ -22,6 +22,9 @@ class ChatResponse(BaseModel):
     timestamp: datetime
     tokens_used: Optional[int]
 
+class VoiceChatResponse(ChatResponse):
+    audio_base64: str      # Base64 encoded MP3 audio
+
 class ConversationHistory(BaseModel):
     session_id: str
     farmer_id: str
