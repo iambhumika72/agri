@@ -11,6 +11,7 @@ class FarmRequest(BaseModel):
     crop_type: str = Field("Wheat", example="Wheat")
     planting_date: datetime = Field(..., example="2024-10-01T00:00:00")
     season: str = Field("Kharif", example="Kharif")
+    language: str = "en"   # ISO 639-1 code for response language
 
 class SatelliteResponse(BaseModel):
     acquisition_date: str

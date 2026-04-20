@@ -20,7 +20,14 @@
     "weather": "Weather",
     "insights": "AI Advice",
     "alerts": "Alerts",
-    "logout": "Logout"
+    "yield": "Yield History",
+    "soil": "Soil Health",
+    "pest_history": "Pest History",
+    "system_health": "System Health",
+    "pest_detect": "Pest Detection",
+    "assistant": "AI Assistant",
+    "logout": "Logout",
+    "navigation": "Navigation"
   },
   "page": {
     "dashboard": {
@@ -61,7 +68,17 @@
     },
     "pest_detect": {
       "title": "Pest Detection",
-      "desc": "Upload a photo to detect plant diseases."
+      "desc": "Upload a photo to detect plant diseases and pests."
+    },
+    "assistant": {
+      "title": "AI Farm Assistant",
+      "desc": "Ask the AI for personalised farm advice in your language."
+    },
+    "onboarding": {
+      "title": "Setup KrishiAI",
+      "step_language": "Choose Language",
+      "step_units": "Units & Region",
+      "step_notifications": "Notifications"
     }
   },
   "dashboard": {
@@ -69,7 +86,17 @@
     "soil_moisture": "Avg Soil Moisture",
     "alerts_today": "Alerts Today",
     "next_irrigation": "Next Irrigation",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "farm_health_overview": "Farm Health Overview",
+    "llm_summary": "LLM Summary",
+    "urgent_action": "Urgent Action Required",
+    "urgent_action_desc": "Vision analysis detected an issue that requires your immediate attention.",
+    "pest_risk_score": "Pest Risk Score",
+    "irrigation_efficiency": "Irrigation Efficiency",
+    "soil_deficiencies": "Soil Deficiencies",
+    "yield_trend": "Yield Trend",
+    "no_vision_analysis": "No vision analysis available.",
+    "select_farm_prompt": "Please enter or select a Farm ID to view dashboard data."
   },
   "farm": {
     "overview": "Overview",
@@ -79,7 +106,14 @@
     "send_sms": "Send SMS",
     "drought_risk": "Drought Risk",
     "frost_warning": "Frost Warning",
-    "heat_stress": "Heat Stress"
+    "heat_stress": "Heat Stress",
+    "drought_risk_score": "Drought Risk Score",
+    "detailed_analysis": "Detailed analysis and history for this farm.",
+    "no_hourly_soil": "No hourly soil data available.",
+    "no_ai_insights": "No new AI insights available for this farm yet.",
+    "alert_history": "Alert History",
+    "select_farm_prompt": "Please select a Farm ID to view details.",
+    "no_farms": "No farms registered yet."
   },
   "weather": {
     "today": "Today",
@@ -89,7 +123,115 @@
     "crop_season": "Crop Season",
     "kharif": "Kharif",
     "rabi": "Rabi",
-    "zaid": "Zaid"
+    "zaid": "Zaid",
+    "condition": "Condition",
+    "temperature": "Temperature",
+    "precipitation": "Precipitation",
+    "soil_moisture": "Soil Moisture",
+    "no_forecast": "No forecast data available for this farm."
+  },
+  "insights": {
+    "ai_model_status": "AI Model Status",
+    "filter": "Filter",
+    "no_insights": "No insights found for the selected filter.",
+    "loading": "Loading insights..."
+  },
+  "alerts": {
+    "active_critical": "Active Critical",
+    "total_alerts": "Total Alerts",
+    "recent_count": "Recent Count",
+    "farm_id": "Farm ID",
+    "alert_type": "Alert Type",
+    "message": "Message",
+    "no_alerts": "No alerts found.",
+    "select_farm_prompt": "Please select a Farm ID to view and manage alerts.",
+    "loading": "Loading alerts..."
+  },
+  "yield": {
+    "yield_over_seasons": "Yield Over Seasons",
+    "raw_records": "Raw Records",
+    "season": "Season",
+    "year": "Year",
+    "crop": "Crop",
+    "harvest_date": "Harvest Date",
+    "yield_kg_ha": "Yield (kg/ha)",
+    "no_yield_history": "No yield history available for this farm.",
+    "select_farm_prompt": "Please select a Farm ID to view yield history.",
+    "loading": "Fetching yield records..."
+  },
+  "soil": {
+    "npk_trends": "NPK Trends Over Time",
+    "deficiencies": "Identified Deficiencies",
+    "nitrogen": "Nitrogen (ppm)",
+    "phosphorus": "Phosphorus (ppm)",
+    "potassium": "Potassium (ppm)",
+    "no_soil_data": "No soil health data available for this farm.",
+    "select_farm_prompt": "Please select a Farm ID to view soil health.",
+    "loading": "Fetching soil records..."
+  },
+  "pest": {
+    "timeline": "Timeline (Last 12 Months)",
+    "affected_area": "Affected Area",
+    "treatment": "Treatment",
+    "no_pest_history": "No pest outbreaks recorded in the last year.",
+    "select_farm_prompt": "Please select a Farm ID to view pest history.",
+    "loading": "Fetching pest records...",
+    "detect_title": "Pest Detection",
+    "camera_ready": "Camera ready. Take or upload a close-up photo.",
+    "analyzing": "Analyzing plant photo...",
+    "results_placeholder": "Results will appear here after analysis.",
+    "camera_error": "Could not access camera. Please use file upload.",
+    "consult_local": "Consult local officer",
+    "upload_photo": "Upload Photo",
+    "take_photo": "Take Photo"
+  },
+  "system": {
+    "core_api": "Core API",
+    "dependencies": "Dependencies",
+    "external_services": "External Services",
+    "vision_pipeline": "Vision AI Pipeline",
+    "gemini_faiss": "Gemini Pro & FAISS",
+    "status": "Status",
+    "version": "Version",
+    "gemini": "Gemini",
+    "faiss": "FAISS",
+    "total_analyses": "Total Analyses",
+    "loading": "Checking system status..."
+  },
+  "assistant": {
+    "title": "AI Farm Assistant",
+    "farm_id": "Farm ID",
+    "crop_type": "Crop Type",
+    "crop_placeholder": "e.g. Wheat, Rice, Cotton",
+    "season": "Season",
+    "language": "Advisory Language",
+    "include_sms": "Include SMS Advisory",
+    "get_advisory": "Get Advisory",
+    "thinking": "AgriSense is thinking...",
+    "attributed_to": "AgriSense Assistant",
+    "confidence": "confidence",
+    "irrigation_advice": "Irrigation Advice",
+    "yield_advice": "Yield Advice",
+    "pest_advice": "Pest Advice",
+    "sms_preview": "SMS Advisory",
+    "no_advisory": "Submit the form above to get your personalised farm advisory.",
+    "error_retry": "Failed to get advisory. Please try again.",
+    "previous_advisories": "Previous Advisories"
+  },
+  "onboarding": {
+    "configure_units": "Configure units for your region",
+    "configure_notifications": "Choose how you want to receive updates",
+    "temperature": "Temperature",
+    "area_unit": "Area Unit",
+    "rainfall_unit": "Rainfall Unit",
+    "sms_alerts": "SMS Alerts",
+    "email_updates": "Email Updates",
+    "push_notifications": "Push Notifications",
+    "frequency_daily": "Daily",
+    "frequency_weekly": "Weekly",
+    "frequency_critical": "Critical only",
+    "finish": "Finish Setup",
+    "next": "Next"
   },
   "common": {
     "loading": "Loading...",
@@ -98,6 +240,23 @@
     "no_data": "No data available",
     "save": "Save",
     "back": "Back",
-    "last_updated": "Last updated"
+    "last_updated": "Last updated",
+    "select_farm": "Select Farm",
+    "enter_farm_id": "Enter Farm ID",
+    "confidence_trend": "Confidence trend",
+    "recommended_action": "Recommended Action",
+    "farm_health_score": "Farm Health Score",
+    "soil_health_profile": "Soil Health Profile",
+    "sms_preview": "SMS Preview",
+    "notifications": "Notifications",
+    "no_notifications": "No notifications yet",
+    "enable_location": "Enable Location",
+    "refresh_gps": "Refresh GPS",
+    "change": "Change",
+    "cancel": "Cancel",
+    "clear_location": "Clear location",
+    "try_again": "Try Again",
+    "field_observation": "Field Observation Report",
+    "moisture": "Moisture"
   }
 }

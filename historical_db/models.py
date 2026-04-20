@@ -31,6 +31,7 @@ from sqlalchemy import (
     UniqueConstraint,
     Uuid,
     func,
+    JSON,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, relationship
 from sqlalchemy.dialects.postgresql import UUID
@@ -343,7 +344,7 @@ class MandiPrice(Base):
     __tablename__ = "mandi_prices"
 
     price_id: uuid.UUID = Column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+        Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     state: str = Column(String(100), nullable=False)
     district: str = Column(String(100), nullable=False)
@@ -377,6 +378,49 @@ class MandiPrice(Base):
             "max_price": self.max_price,
             "modal_price": self.modal_price,
             "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+# ---------------------------------------------------------------------------
+# SatelliteImagery
+# ---------------------------------------------------------------------------
+class SatelliteImagery(Base):
+    """Satellite observation for a farm."""
+
+    __tablename__ = "satellite_imagery"
+
+    image_id: uuid.UUID = Column(
+        Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    farm_id: uuid.UUID = Column(
+        Uuid(as_uuid=True), ForeignKey("farms.farm_id", ondelete="CASCADE"), nullable=False
+    )
+    captured_at: datetime = Column(DateTime(timezone=True), nullable=False)
+    image_path: str = Column(String(255), nullable=False)
+    ndvi_mean: Optional[float] = Column(Double)
+    ndvi_std: Optional[float] = Column(Double)
+    cloud_cover_pct: Optional[float] = Column(Double)
+    source: str = Column(String(50), nullable=False) # sentinel-2
+    metadata_json: Optional[dict] = Column(JSON)
+    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (
+        Index("idx_satellite_farm_captured", "farm_id", "captured_at"),
+    )
+
+    farm: Mapped["Farm"] = relationship("Farm")
+
+    def to_dict(self) -> dict:
+        return {
+            "image_id": str(self.image_id),
+            "farm_id": str(self.farm_id),
+            "captured_at": self.captured_at.isoformat() if self.captured_at else None,
+            "image_path": self.image_path,
+            "ndvi_mean": self.ndvi_mean,
+            "ndvi_std": self.ndvi_std,
+            "cloud_cover_pct": self.cloud_cover_pct,
+            "source": self.source,
+            "metadata_json": self.metadata_json,
         }
 
 

@@ -143,6 +143,7 @@ class AgriState:
 
     # Pipeline metadata
     pipeline_run_id: str = ""
+    language: str = "en"
     started_at: datetime = field(default_factory=datetime.utcnow)
     errors: list[str] = field(default_factory=list)
 

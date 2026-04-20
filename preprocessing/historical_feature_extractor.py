@@ -273,8 +273,28 @@ class HistoricalFeatureExtractor:
             actual_ratio = 1.0 + irr_deficit / 100.0
             irr_efficiency = round(min(1.0, 1.0 / actual_ratio if actual_ratio > 0 else 0.0), 3)
 
+        # --- Farm Info ---
+        farm_info = {}
+        try:
+            with self._db._get_session() as session:
+                from sqlalchemy import text
+                stmt = text("SELECT farmer_name, district, state, latitude, longitude FROM farms WHERE farm_id = :fid")
+                res = session.execute(stmt, {"fid": str(farm_id)})
+                row = res.fetchone()
+                if row:
+                    farm_info = {
+                        "farmer_name": row[0],
+                        "district": row[1],
+                        "state": row[2],
+                        "latitude": row[3],
+                        "longitude": row[4],
+                    }
+        except Exception as e:
+            logger.warning(f"Failed to fetch farm info: {e}")
+
         return {
             "farm_id": farm_id,
+            "farm_info": farm_info,
             "last_season_yield_kg_ha": round(last_yield, 2) if last_yield else None,
             "yield_vs_3yr_avg_pct": yield_vs_avg,
             "top_pest_risk": top_pest,

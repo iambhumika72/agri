@@ -139,7 +139,7 @@ def _yield_history_list(db: Any, farm_id: str) -> list[dict]:
         FROM yield_records yr
         JOIN crops c ON c.crop_id = yr.crop_id
         WHERE yr.farm_id = :farm_id
-          AND yr.year   >= (EXTRACT(YEAR FROM CURRENT_DATE)::int - 5)
+          AND yr.year   >= (CAST(strftime('%Y', 'now') AS INTEGER) - 5)
         ORDER BY yr.harvest_date
         """
     )

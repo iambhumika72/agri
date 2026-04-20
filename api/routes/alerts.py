@@ -129,6 +129,7 @@ async def get_farm_alerts(
     farm_id: str,
     days: int = Query(default=7, ge=1, le=30, description="Number of past days to retrieve alerts for"),
     run_pipeline: bool = Query(default=False, description="Run live pipeline to generate real-time alerts from vision analysis"),
+    language: str = Query(default="en", description="ISO 639-1 language code for alert translation"),
 ):
     """
     Returns all active alerts for a farm over the last N days.
@@ -197,6 +198,24 @@ async def get_farm_alerts(
             expires_at=now + timedelta(days=2),
             source="static",
         ))
+    
+    # Translate alerts if language is not English
+    if language != "en":
+        try:
+            from generative.multilingual import translate_alert_message, is_supported
+            if is_supported(language):
+                translated_alerts = []
+                for alert in alerts:
+                    t_msg, t_rec = translate_alert_message(
+                        alert.message, alert.recommendation, language
+                    )
+                    translated_alerts.append(alert.model_copy(update={
+                        "message": t_msg,
+                        "recommendation": t_rec,
+                    }))
+                alerts = translated_alerts
+        except Exception as e:
+            log.warning("Alert translation failed: %s — returning English.", e)
 
     return AlertSummary(
         farm_id=farm_id,
@@ -212,6 +231,7 @@ async def trigger_manual_alert(
     alert_type: str,
     message: str,
     severity: str = "medium",
+    language: str = "en",
 ):
     """
     Manually triggers an alert for a farm.
@@ -236,3 +256,13 @@ async def trigger_manual_alert(
         expires_at=now + timedelta(days=3),
         source="manual",
     )
+    
+    # After creating the alert, translate if needed
+    if language != "en":
+        from generative.multilingual import translate_alert_message, is_supported
+        if is_supported(language):
+            t_msg, t_rec = translate_alert_message(
+                alert.message, alert.recommendation, language
+            )
+            alert = alert.model_copy(update={"message": t_msg, "recommendation": t_rec})
+    return alert

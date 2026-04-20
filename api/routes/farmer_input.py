@@ -162,6 +162,7 @@ class Base64PestRequest(BaseModel):
     farm_id: Optional[str] = "anonymous"
     crop_name: Optional[str] = None
     growth_stage: Optional[str] = None
+    language: str = "en"
 
 
 class FarmerInputResponse(BaseModel):
@@ -243,6 +244,12 @@ async def receive_sms(
         )
 
     return FarmerInputResponse(record_id=record_id)
+
+    # Language note: The ingested SMS body may be in a regional language.
+    # Future enhancement: call detect_farmer_language({"language": parsed_lang})
+    # to store the detected language with the record and use it for SMS reply translation.
+    # For now, the recommendation endpoint accepts a `language` parameter that the
+    # frontend passes based on the user's selected locale.
 
 
 @router.post(
@@ -332,7 +339,8 @@ async def detect_pest(
     file: UploadFile = File(...),
     farm_id: str = Form("anonymous"),
     crop_name: Optional[str] = Form(None),
-    growth_stage: Optional[str] = Form(None)
+    growth_stage: Optional[str] = Form(None),
+    language: str = Form("en"),
 ) -> PlantPestResult:
     """Processes a multipart image upload for pest detection."""
     try:
@@ -391,6 +399,26 @@ async def detect_pest(
             # In a real app, call existing SMS function here
             pass
 
+        # Translate human-readable fields if language requested
+        if language != "en":
+            try:
+                from generative.multilingual import translate_batch, is_supported
+                if is_supported(language):
+                    vision = result.vision_analysis
+                    fields = {
+                        "visual_evidence": getattr(vision, "visual_evidence", ""),
+                        "recommended_action": getattr(vision, "recommended_action", ""),
+                        "agronomist_note": getattr(vision, "agronomist_note", ""),
+                        "likely_cause": getattr(vision, "likely_cause", ""),
+                    }
+                    translated = translate_batch(fields, language)
+                    # Update the vision_analysis object's text fields
+                    for key, val in translated.items():
+                        if hasattr(vision, key):
+                            object.__setattr__(vision, key, val)
+            except Exception as e:
+                logger.warning("Pest result translation failed: %s", e)
+
         logger.info(f"Pest detection complete for {farm_id}: {vision_analysis.pest_type} ({final_conf:.2f})")
         return result
 
@@ -425,7 +453,8 @@ async def detect_pest_base64(payload: Base64PestRequest) -> PlantPestResult:
             file=mock_file, # type: ignore
             farm_id=payload.farm_id or "anonymous",
             crop_name=payload.crop_name,
-            growth_stage=payload.growth_stage
+            growth_stage=payload.growth_stage,
+            language=payload.language
         )
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid base64 payload: {str(e)}")

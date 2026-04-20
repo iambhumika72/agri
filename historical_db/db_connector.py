@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 
 # Tables that insert_record is permitted to write to
 _ALLOWED_TABLES = frozenset(
-    {"farms", "crops", "yield_records", "pest_records", "irrigation_logs", "soil_health", "mandi_prices"}
+    {"farms", "crops", "yield_records", "pest_records", "irrigation_logs", "soil_health", "mandi_prices", "satellite_imagery"}
 )
 
 
@@ -362,6 +362,31 @@ class HistoricalDBConnector:
         if not df.empty:
             df["ds"] = pd.to_datetime(df["ds"])
         return df
+
+    def get_satellite_imagery(self, farm_id: str, start_date: date, end_date: date) -> pd.DataFrame:
+        """
+        Return satellite imagery records for a farm within [start_date, end_date].
+        """
+        logger.info("get_satellite_imagery farm_id=%s %s → %s", farm_id, start_date, end_date)
+        sql = text("""
+            SELECT 
+                imagery_id, farm_id, capture_date, ndvi_mean, cloud_cover_pct, 
+                image_path, metadata_json, created_at
+            FROM satellite_imagery
+            WHERE farm_id = :farm_id
+              AND capture_date BETWEEN :start_date AND :end_date
+            ORDER BY capture_date DESC
+        """)
+        with self._get_session() as session:
+            result = session.execute(sql, {"farm_id": farm_id, "start_date": str(start_date), "end_date": str(end_date)})
+            df = pd.DataFrame(result.fetchall(), columns=result.keys())
+        
+        if df.empty:
+            return df
+        
+        df["farm_id"] = df["farm_id"].astype(str)
+        df["capture_date"] = pd.to_datetime(df["capture_date"])
+        return df.set_index(["farm_id", "capture_date"])
 
     # ------------------------------------------------------------------
     # Generic insert

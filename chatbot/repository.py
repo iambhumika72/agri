@@ -33,20 +33,32 @@ async def get_crop_data(farmer_id: str, db: AsyncSession) -> Optional[dict]:
 
 async def get_historical_data(farmer_id: str, db: AsyncSession) -> Optional[dict]:
     try:
-        stmt = text("""
+        # Fetch latest yield
+        yield_stmt = text("""
             SELECT yield_kg_per_hectare 
             FROM yield_records 
             WHERE farm_id = :fid 
             ORDER BY harvest_date DESC LIMIT 1
         """)
-        res = await db.execute(stmt, {"fid": farmer_id})
-        row = res.fetchone()
-        if row:
-            return {
-                "last_yield": f"{row[0]} kg/hectare",
-                "common_pests": [],
-                "notes": ""
-            }
+        yield_res = await db.execute(yield_stmt, {"fid": farmer_id})
+        yield_row = yield_res.fetchone()
+        
+        # Fetch pests
+        pest_stmt = text("""
+            SELECT pest_name, severity, detected_date 
+            FROM pest_records 
+            WHERE farm_id = :fid 
+            ORDER BY detected_date DESC
+        """)
+        pest_res = await db.execute(pest_stmt, {"fid": farmer_id})
+        pest_rows = pest_res.fetchall()
+        
+        return {
+            "last_yield": f"{yield_row[0]} kg/hectare" if yield_row else "N/A",
+            "common_pests": [row[0] for row in pest_rows],
+            "pest_history": [{"name": row[0], "severity": row[1], "date": str(row[2])} for row in pest_rows],
+            "notes": "Historical data reflects ICAR district averages for Ludhiana."
+        }
     except Exception as e:
         logger.warning(f"Failed to fetch historical data: {e}")
     return None

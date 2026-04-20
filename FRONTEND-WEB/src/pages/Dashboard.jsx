@@ -69,7 +69,7 @@ export default function Dashboard() {
     <div className="max-w-7xl mx-auto space-y-6 pb-24 md:pb-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <PageHeader 
-          titleKey="page.dashboard.title" 
+          title={summary?.farm_info?.farmer_name || t('page.dashboard.title')} 
           descKey="page.dashboard.desc" 
           icon={LayoutDashboard} 
         />

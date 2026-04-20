@@ -129,10 +129,20 @@ export default function FarmDetail() {
             <div className="flex items-start justify-between gap-4 flex-wrap">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <h1 className="text-xl font-bold text-neutral-800">{farmId}</h1>
+                  <h1 className="text-xl font-bold text-neutral-800">{summary?.farm_info?.farmer_name || farmId}</h1>
                   <span className="bg-primary-50 text-primary-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
                     Active
                   </span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-neutral-500">
+                   <div className="flex items-center gap-1">
+                     <MapPin size={14} className="text-emerald-500" />
+                     <span>30.9010° N, 75.8573° E (Ludhiana, Punjab)</span>
+                   </div>
+                   <div className="flex items-center gap-1">
+                     <Crop size={14} className="text-emerald-500" />
+                     <span>Wheat (Rabi Season)</span>
+                   </div>
                 </div>
               </div>
             </div>

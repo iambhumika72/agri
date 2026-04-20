@@ -115,6 +115,7 @@ class RecommendationEngine:
         yield_forecast: Any,           # YieldForecast dataclass
         feature_vector: Any,           # FeatureVector dataclass
         vision_analysis: Any = None,   # VisionAnalysis dataclass OR dict OR None
+        language: str = "en",          # ISO 639-1 language code
     ) -> FarmRecommendation:
         """
         Main entry point: generates the complete farm advisory.
@@ -185,6 +186,18 @@ class RecommendationEngine:
             pest_data=pest_data,
             vision_analysis=vision_dict,  # always a dict for prompt builder
         )
+
+        # If language is supported and not English, append language instruction to system prompt
+        if language != "en":
+            from .multilingual import SUPPORTED_LANGUAGES, _TRANSLATION_INSTRUCTIONS
+            if language in SUPPORTED_LANGUAGES:
+                lang_name = SUPPORTED_LANGUAGES[language]
+                lang_instruction = _TRANSLATION_INSTRUCTIONS.get(language, "")
+                full_system += (
+                    f"\n\nIMPORTANT: Generate your entire response in {lang_name}. "
+                    f"{lang_instruction} "
+                    "Keep numbers, units (kg, mm, liters), crop names, and technical terms in English."
+                )
 
         irrigation_advice = self._safe_generate(irr_system, irr_user, "Irrigation data unavailable.")
         yield_advice = self._safe_generate(yld_system, yld_user, "Yield forecast unavailable.")

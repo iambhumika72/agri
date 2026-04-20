@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-export default function PageHeader({ titleKey, descKey, icon: Icon }) {
+export default function PageHeader({ title, titleKey, descKey, icon: Icon }) {
   const { t } = useTranslation();
 
   return (
@@ -17,7 +17,7 @@ export default function PageHeader({ titleKey, descKey, icon: Icon }) {
         )}
         <div>
           <h1 className="text-[20px] font-medium text-neutral-800 leading-tight">
-            {t(titleKey)}
+            {title || t(titleKey)}
           </h1>
           <p className="text-[14px] text-neutral-500 mt-1 max-w-full truncate md:whitespace-normal">
             {t(descKey)}
@@ -29,7 +29,8 @@ export default function PageHeader({ titleKey, descKey, icon: Icon }) {
 }
 
 PageHeader.propTypes = {
-  titleKey: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  titleKey: PropTypes.string,
   descKey: PropTypes.string.isRequired,
   icon: PropTypes.elementType,
 };

@@ -428,6 +428,33 @@ def ingest_sentinel2(
         "Starting ingestion | farm_id=%s | %s → %s | cloud_thresh=%.0f%%",
         farm_id, start_date, end_date, cloud_cover_threshold * 100,
     )
+    
+    # ------------------------------------------------------------------ #
+    # Step 0: Check DB for existing 'Ground-Truth' records                #
+    # ------------------------------------------------------------------ #
+    from historical_db.db_connector import HistoricalDBConnector
+    from datetime import date as dt_date
+    
+    try:
+        with HistoricalDBConnector() as db:
+            s_date = dt_date.fromisoformat(start_date)
+            e_date = dt_date.fromisoformat(end_date)
+            db_records = db.get_satellite_imagery(farm_id, s_date, e_date)
+            
+            if not db_records.empty:
+                # Pick the latest/best one
+                best = db_records.iloc[0]
+                log.info("Found seeded/historical record in DB: %s", best["image_path"])
+                return {
+                    "geotiff_path": best["image_path"],
+                    "acquisition_date": best.name[1].strftime("%Y-%m-%d"),
+                    "cloud_cover_pct": best["cloud_cover_pct"],
+                    "farm_id": farm_id,
+                    "crs": "EPSG:4326", # Default for seeded data
+                    "stale": False,
+                }
+    except Exception as db_err:
+        log.warning("DB lookup for satellite imagery failed: %s", db_err)
 
     band_paths: dict[str, Path] | None = None
     scl_path: Path | None = None

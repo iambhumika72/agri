@@ -24,7 +24,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 # Route imports
-from .routes import health, forecast, alerts, recommendations, crop_profit
+from .routes import health, forecast, alerts, recommendations, crop_profit, language
 from .routes.farmer_input import router as farmer_input_router
 from . import historical_db_routes
 from ingestion.farmer_input_ingestion import init_db
@@ -128,6 +128,7 @@ def create_app() -> FastAPI:
     app.include_router(alerts.router)
     app.include_router(recommendations.router)
     app.include_router(crop_profit.router)
+    app.include_router(language.router)
     app.include_router(farmer_input_router)
     app.include_router(historical_db_routes.router)
     app.include_router(iot_router)

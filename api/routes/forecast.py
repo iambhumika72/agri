@@ -164,6 +164,15 @@ async def create_forecast(request: FarmRequest):
         # 5. LLM Context
         rec_context = build_farm_context_string(fv, sat_analysis, {"crop": request.crop_type, "season": request.season})
         
+        # Translate recommendation context if needed
+        if request.language != "en":
+            try:
+                from generative.multilingual import translate_advisory, is_supported
+                if is_supported(request.language):
+                    rec_context = translate_advisory(rec_context, request.language)
+            except Exception as e:
+                log.warning("Forecast context translation failed: %s", e)
+
         # Prepare response
         return FullForecastResponse(
             farm_id=request.farm_id,

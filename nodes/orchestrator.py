@@ -54,6 +54,7 @@ class AgriSensePipeline:
         satellite_data: Optional[Any] = None,
         aligned_df: Optional[Any] = None,
         feature_vector: Optional[Any] = None,
+        language: str = "en",
     ) -> AgriState:
         """
         Executes the full pipeline for a given farm.
@@ -65,6 +66,7 @@ class AgriSensePipeline:
             satellite=satellite_data,
             aligned_df=aligned_df,
             feature_vector=feature_vector,
+            language=language,
         )
         
         log.info("Running pipeline for farm_id=%s", farm_id)

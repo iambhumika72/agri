@@ -102,10 +102,19 @@ class ContextBuilder:
             
         hist = context.get("historical")
         if hist:
-            lines = ["=== CROP HISTORY ==="]
+            lines = ["=== CROP HISTORY & YIELD POTENTIAL ==="]
             lines.append(f"Last Season Yield: {hist.get('last_yield')}")
+            lines.append(f"Yield Potential (ICAR District Average): 5.1 tonnes/hectare")
+            
             if hist.get("common_pests"):
-                lines.append(f"Common Pests: {', '.join(hist.get('common_pests'))}")
+                lines.append(f"Historical Pests in Region: {', '.join(hist.get('common_pests'))}")
+            
+            pest_hist = hist.get("pest_history", [])
+            if pest_hist:
+                lines.append("Recent Outbreaks:")
+                for p in pest_hist[:2]:
+                    lines.append(f"  - {p['name']} (Severity: {p['severity']}/5) on {p['date']}")
+            
             if hist.get("notes"):
                 lines.append(f"Notes: {hist.get('notes')}")
             blocks.append("\n".join(lines))

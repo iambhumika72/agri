@@ -15,7 +15,15 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Tuple
 
-import google.generativeai as genai
+# Support both SDK versions
+try:
+    from google import genai
+    from google.genai import types as genai_types
+    _USE_NEW_SDK = True
+except ImportError:
+    import google.generativeai as genai  # type: ignore
+    genai_types = genai.types  # type: ignore
+    _USE_NEW_SDK = False
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml
@@ -46,8 +54,12 @@ class VisionModel:
             self.model = None
         else:
             self.is_ready = True
-            genai.configure(api_key=api_key)
-            self.model = genai.GenerativeModel(model_name=model_name)
+            if _USE_NEW_SDK:
+                self.client = genai.Client(api_key=api_key)
+                self.model = None # Not used directly in new SDK, we use client.models.generate_content
+            else:
+                genai.configure(api_key=api_key)
+                self.model = genai.GenerativeModel(model_name=model_name)
         
         # Load vision config
         if os.path.exists(config_path):
@@ -195,13 +207,33 @@ class VisionModel:
         full_prompt = f"{payload['prompt']}\n\nCONTEXT:\n{payload['context']}"
         
         def _call_gemini(retry_reminder: str = ""):
-            return self.model.generate_content(
-                [image_part, f"{full_prompt}\n{retry_reminder}"],
-                generation_config=genai.types.GenerationConfig(
-                    temperature=self.config["temperature"],
-                    max_output_tokens=self.config["max_output_tokens"]
+            prompt_parts = [image_part, f"{full_prompt}\n{retry_reminder}"]
+            if _USE_NEW_SDK:
+                # Map to new SDK format
+                contents = [
+                    genai_types.Content(
+                        parts=[
+                            genai_types.Part(inline_data=genai_types.Blob(mime_type=image_part["mime_type"], data=image_part["data"])),
+                            genai_types.Part(text=f"{full_prompt}\n{retry_reminder}")
+                        ]
+                    )
+                ]
+                return self.client.models.generate_content(
+                    model=self.model_name,
+                    contents=contents,
+                    config=genai_types.GenerateContentConfig(
+                        temperature=self.config["temperature"],
+                        max_output_tokens=self.config["max_output_tokens"]
+                    )
                 )
-            )
+            else:
+                return self.model.generate_content(
+                    prompt_parts,
+                    generation_config=genai_types.GenerationConfig(
+                        temperature=self.config["temperature"],
+                        max_output_tokens=self.config["max_output_tokens"]
+                    )
+                )
 
         try:
             response = _call_gemini()
@@ -368,13 +400,31 @@ class VisionModel:
         image_part = {"mime_type": "image/png", "data": image_base64}
 
         def _call_gemini(retry_reminder: str = ""):
-            return self.model.generate_content(
-                [image_part, f"{prompt}\n{retry_reminder}"],
-                generation_config=genai.types.GenerationConfig(
-                    temperature=self.config["temperature"],
-                    max_output_tokens=self.config["max_output_tokens"]
+            if _USE_NEW_SDK:
+                contents = [
+                    genai_types.Content(
+                        parts=[
+                            genai_types.Part(inline_data=genai_types.Blob(mime_type=image_part["mime_type"], data=image_part["data"])),
+                            genai_types.Part(text=f"{prompt}\n{retry_reminder}")
+                        ]
+                    )
+                ]
+                return self.client.models.generate_content(
+                    model=self.model_name,
+                    contents=contents,
+                    config=genai_types.GenerateContentConfig(
+                        temperature=self.config["temperature"],
+                        max_output_tokens=self.config["max_output_tokens"]
+                    )
                 )
-            )
+            else:
+                return self.model.generate_content(
+                    [image_part, f"{prompt}\n{retry_reminder}"],
+                    generation_config=genai_types.GenerationConfig(
+                        temperature=self.config["temperature"],
+                        max_output_tokens=self.config["max_output_tokens"]
+                    )
+                )
 
         try:
             response = _call_gemini()

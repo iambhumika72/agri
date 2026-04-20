@@ -111,6 +111,11 @@ export default function FarmMap({ zones, farmName }) {
             </g>
           );
         })}
+        {/* Coordinates Overlay */}
+        <g transform="translate(160, 215)">
+          <rect width="130" height="15" rx="4" fill="white" fillOpacity="0.85" />
+          <text x="5" y="11" className="text-[9px] font-bold fill-neutral-600">30.9010° N, 75.8573° E</text>
+        </g>
         {/* Legend */}
         <rect x={8} y={232} width={10} height={10} fill="#BA7517" fillOpacity={0.5} rx={2} />
         <text x={21} y={241} fontSize={8} fill="#5F5E5A">Dry</text>

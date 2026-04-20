@@ -28,8 +28,8 @@ class PlantPhotoPreprocessor:
             raise ValueError(f"Unsupported format: {ext}")
 
         size_mb = len(image_bytes) / (1024 * 1024)
-        if size_mb < 0.001 or size_mb > 20.0:
-            raise ValueError("File too small/large (1KB-20MB allowed)")
+        if size_mb < 0.0001 or size_mb > 20.0:
+            raise ValueError("File too small/large (100B-20MB allowed)")
 
         nparr = np.frombuffer(image_bytes, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)

@@ -50,6 +50,7 @@ def recommendation_node(state: AgriState) -> AgriState:
             yield_forecast=state.yield_forecast,
             feature_vector=state.feature_vector,
             vision_analysis=state.vision_analysis,
+            language=state.language,
         )
         
         state.full_advisory = recommendation

@@ -26,7 +26,7 @@ class RecommendationRequest(BaseModel):
     farm_id: str = Field(..., description="Unique farm identifier")
     crop_type: str = Field(..., description="Crop being grown (e.g., Wheat, Rice)")
     season: str = Field(..., description="Current season: kharif | rabi | zaid")
-    language: str = Field(default="en", description="Response language code: en, hi, ta, te, mr, bn, kn")
+    language: str = Field(default="en", description="Response language code: en, hi, pa, gu, ta, te, mr, bn, kn")
     include_sms: bool = Field(default=False, description="Whether to include an SMS-formatted advisory")
 
     # Optional pre-computed context (to avoid re-running pipeline)
@@ -93,7 +93,7 @@ async def generate_recommendation(request: RecommendationRequest):
         from generative.multilingual import translate_advisory
 
         pipeline = AgriSensePipeline()
-        final_state = await pipeline.run(farm_id=request.farm_id)
+        final_state = await pipeline.run(farm_id=request.farm_id, language=request.language)
 
         # Unwrap the FarmRecommendation object from AgriState
         recommendation, model_used = _extract_recommendation(final_state)
@@ -126,9 +126,38 @@ async def generate_recommendation(request: RecommendationRequest):
         # Translation (non-English requests)
         if request.language != "en":
             try:
-                full_advisory_text = translate_advisory(full_advisory_text, request.language)
+                from generative.multilingual import translate_batch, translate_sms, is_supported
+                if is_supported(request.language):
+                    # Batch translate all advisory fields in one LLM call
+                    fields_to_translate = {
+                        "full_advisory": full_advisory_text,
+                        "irrigation_advice": recommendation.irrigation_advice,
+                        "yield_advice": recommendation.yield_advice,
+                        "pest_advice": recommendation.pest_advice,
+                    }
+                    translated_fields = translate_batch(
+                        fields_to_translate, request.language
+                    )
+                    full_advisory_text = translated_fields.get("full_advisory", full_advisory_text)
+                    irrigation_advice = translated_fields.get("irrigation_advice", recommendation.irrigation_advice)
+                    yield_advice = translated_fields.get("yield_advice", recommendation.yield_advice)
+                    pest_advice = translated_fields.get("pest_advice", recommendation.pest_advice)
+
+                    # Translate SMS separately (length constraint)
+                    sms_message = None
+                    if request.include_sms and recommendation.sms_message:
+                        sms_message = translate_sms(recommendation.sms_message, request.language)
             except Exception as te:
                 log.warning("Translation to '%s' failed: %s — returning English.", request.language, te)
+                irrigation_advice = recommendation.irrigation_advice
+                yield_advice = recommendation.yield_advice
+                pest_advice = recommendation.pest_advice
+                sms_message = recommendation.sms_message if request.include_sms else None
+        else:
+            irrigation_advice = recommendation.irrigation_advice
+            yield_advice = recommendation.yield_advice
+            pest_advice = recommendation.pest_advice
+            sms_message = recommendation.sms_message if request.include_sms else None
 
         return RecommendationResponse(
             farm_id=request.farm_id,
@@ -136,10 +165,10 @@ async def generate_recommendation(request: RecommendationRequest):
             language=request.language,
             generated_at=datetime.utcnow(),
             full_advisory=full_advisory_text,
-            irrigation_advice=recommendation.irrigation_advice,
-            yield_advice=recommendation.yield_advice,
-            pest_advice=recommendation.pest_advice,
-            sms_message=recommendation.sms_message if request.include_sms else None,
+            irrigation_advice=irrigation_advice,
+            yield_advice=yield_advice,
+            pest_advice=pest_advice,
+            sms_message=sms_message,
             model_used=recommendation.model_used or model_used,
             confidence=recommendation.confidence,
         )
