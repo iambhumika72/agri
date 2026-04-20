@@ -1,5 +1,6 @@
 import client from './client';
 import weatherData from '../mock/weather.json';
+import { getStoredLocation } from '../utils/location';
 
 const USE_MOCK = true;
 
@@ -14,7 +15,9 @@ export async function getWeatherForecast(farmId) {
     if (!forecast) throw new Error(`No weather data for farm ${farmId}`);
     return forecast;
   }
-  const { data } = await client.get(`/weather/${farmId}/forecast`);
+  const loc = getStoredLocation();
+  const params = loc?.lat ? { lat: loc.lat, lon: loc.lon } : {};
+  const { data } = await client.get(`/weather/${farmId}/forecast`, { params });
   return data;
 }
 

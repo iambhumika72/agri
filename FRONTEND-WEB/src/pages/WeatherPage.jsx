@@ -4,6 +4,7 @@ import { useFarms } from '../hooks/useFarms';
 import { useWeather } from '../hooks/useWeather';
 import PageHeader from '../components/PageHeader';
 import DataFreshnessBar from '../components/DataFreshnessBar';
+import { useLocation_ } from '../context/LocationContext';
 
 const WMO_LABELS = {
   0: 'Clear Sky', 1: 'Mainly Clear', 2: 'Partly Cloudy', 3: 'Overcast',
@@ -96,6 +97,7 @@ export default function WeatherPage() {
   const { data: farms } = useFarms();
   const [selectedFarmId, setSelectedFarmId] = useState('farm-001');
   const { data: weather, isLoading, error } = useWeather(selectedFarmId);
+  const { location } = useLocation_();
 
   const selectedFarm = farms?.find((f) => f.id === selectedFarmId);
 
@@ -108,6 +110,13 @@ export default function WeatherPage() {
       />
 
       <DataFreshnessBar />
+      
+      {location && (
+        <div className="flex items-center gap-2 text-xs text-primary-600 font-medium px-6 md:px-0 mb-4">
+          <MapPin size={12} />
+          Showing weather near {location.display_name}
+        </div>
+      )}
 
       {/* Farm selector */}
       <div className="card flex items-center gap-4 flex-wrap">

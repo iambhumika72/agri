@@ -11,6 +11,7 @@ import { useAuth } from '../context/AuthContext';
 import NotificationCenter from './NotificationCenter';
 import QuickActionFAB from './QuickActionFAB';
 import TopProgressBar from './TopProgressBar';
+import LocationChip from './LocationChip';
 
 const LANGUAGES = [
   { code: 'en', flag: '🇬🇧', label: 'English', state: 'All India' },
@@ -212,6 +213,7 @@ export default function Layout({ children }) {
             </span>
             {/* Language switcher */}
             <LanguageSwitcher />
+            <LocationChip />
             {/* Notifications */}
             <NotificationCenter />
             {/* User avatar */}

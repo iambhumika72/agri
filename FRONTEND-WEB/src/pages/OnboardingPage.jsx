@@ -13,11 +13,14 @@ const LANGUAGES = [
   { code: 'fr', flag: '🇫🇷', native: 'Français', english: 'French' },
 ];
 
+import { useLocation_ } from '../context/LocationContext';
+
 const PREFS_KEY = 'agri_prefs';
 
 export default function OnboardingPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { requestLocation } = useLocation_();
   const [step, setStep] = useState(0);
   const [selectedLang, setSelectedLang] = useState(localStorage.getItem('agri_lang') || 'en');
   const [prefs, setPrefs] = useState({
@@ -41,6 +44,7 @@ export default function OnboardingPage() {
 
   const finish = () => {
     localStorage.setItem(PREFS_KEY, JSON.stringify({ ...prefs, language: selectedLang }));
+    requestLocation(); // silently request in background
     navigate('/');
   };
 

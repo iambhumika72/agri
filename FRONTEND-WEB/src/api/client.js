@@ -14,12 +14,23 @@ const client = axios.create({
   },
 });
 
+import { getLocationPayload } from '../utils/location';
+
 // Request interceptor — attach auth token if present
 client.interceptors.request.use((config) => {
   const token = localStorage.getItem('auth_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  
+  // Attach location to POST/PATCH requests
+  if (['post', 'patch'].includes(config.method?.toLowerCase())) {
+    const loc = getLocationPayload();
+    if (Object.keys(loc).length > 0) {
+      config.data = { ...config.data, ...loc };
+    }
+  }
+  
   return config;
 });
 
