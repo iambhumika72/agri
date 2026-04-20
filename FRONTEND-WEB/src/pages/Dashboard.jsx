@@ -9,15 +9,25 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorBanner from '../components/ErrorBanner';
 import EmptyState from '../components/EmptyState';
 import { historyAPI, visionAPI } from '../api/client';
+import { useFarms } from '../hooks/useFarms';
 
 export default function Dashboard() {
   const { t } = useTranslation();
-  const [farmId, setFarmId] = useState('');
+  const { data: farms } = useFarms();
+  const [farmId, setFarmId] = useState(localStorage.getItem('krishi_farm_id') || '');
   
   const [summary, setSummary] = useState(null);
   const [vision, setVision] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!farmId && farms && farms.length > 0) {
+      const firstId = farms[0].id;
+      setFarmId(firstId);
+      localStorage.setItem('krishi_farm_id', firstId);
+    }
+  }, [farms, farmId]);
 
   useEffect(() => {
     if (!farmId) return;

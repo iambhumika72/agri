@@ -32,53 +32,48 @@ function AnimatedRoutes() {
 
   return (
     <div key={location.pathname} style={{ animation: 'fadeIn 200ms ease-out both' }}>
-      <Routes location={location}>
+      <Routes>
         {/* Public auth routes */}
         <Route path="/language" element={<LanguageSelectPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Onboarding (needs auth) */}
-        <Route
-          path="/onboarding"
-          element={
-            <ProtectedRoute>
-              <OnboardingPage />
-            </ProtectedRoute>
-          }
-        />
-
         {/* Protected app routes inside Layout */}
         <Route
-          path="/*"
           element={
             <ProtectedRoute>
               <Layout>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/farms" element={<FarmsListPage />} />
-                  <Route path="/farms/:farmId" element={<FarmDetail />} />
-                  <Route path="/weather" element={<WeatherPage />} />
-                  <Route path="/insights" element={<InsightsPage />} />
-                  <Route path="/alerts" element={<AlertsPage />} />
-                  <Route path="/yield" element={<YieldHistoryPage />} />
-                  <Route path="/soil" element={<SoilHealthPage />} />
-                  <Route path="/pest-history" element={<PestHistoryPage />} />
-                  <Route path="/health" element={<SystemHealthPage />} />
-                  <Route path="/pest-detect" element={<PestDetectionPage />} />
-                  <Route
-                    path="*"
-                    element={
-                      <div className="flex flex-col items-center justify-center h-64 gap-3 text-neutral-400">
-                        <p className="text-5xl font-bold text-neutral-200">404</p>
-                        <p className="text-sm">Page not found</p>
-                      </div>
-                    }
-                  />
-                </Routes>
+                <div style={{ animation: 'fadeIn 200ms ease-out both' }} />
               </Layout>
             </ProtectedRoute>
           }
-        />
+        >
+          {/* We use the ProtectedRoute + Layout as a wrapper for these routes */}
+        </Route>
+        
+        {/* This is the better way in RRv6: Nested Routes */}
+        <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/farms" element={<FarmsListPage />} />
+          <Route path="/farms/:farmId" element={<FarmDetail />} />
+          <Route path="/weather" element={<WeatherPage />} />
+          <Route path="/insights" element={<InsightsPage />} />
+          <Route path="/alerts" element={<AlertsPage />} />
+          <Route path="/yield" element={<YieldHistoryPage />} />
+          <Route path="/soil" element={<SoilHealthPage />} />
+          <Route path="/pest-history" element={<PestHistoryPage />} />
+          <Route path="/health" element={<SystemHealthPage />} />
+          <Route path="/pest-detect" element={<PestDetectionPage />} />
+          <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route
+            path="*"
+            element={
+              <div className="flex flex-col items-center justify-center h-64 gap-3 text-neutral-400">
+                <p className="text-5xl font-bold text-neutral-200">404</p>
+                <p className="text-sm">Page not found</p>
+              </div>
+            }
+          />
+        </Route>
       </Routes>
     </div>
   );

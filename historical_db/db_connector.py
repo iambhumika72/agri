@@ -64,15 +64,20 @@ class HistoricalDBConnector:
     # Construction / teardown
     # --------------------------------------------------------------------------
     def __init__(self) -> None:
-        self._env = self._validate_env()
-        self._engine = self._build_engine(self._env)
+        self._url = self._get_db_url()
+        
+        engine_args = {"echo": False}
+        if "sqlite" not in self._url:
+            engine_args.update({
+                "pool_size": 5,
+                "max_overflow": 10,
+                "pool_pre_ping": True
+            })
+            
+        self._engine = create_engine(self._url, **engine_args)
         self._SessionFactory = sessionmaker(bind=self._engine, expire_on_commit=False)
         self._session: Session | None = None
-        logger.info(
-            "HistoricalDBConnector initialised — host=%s db=%s",
-            self._env["DB_HOST"],
-            self._env["DB_NAME"],
-        )
+        logger.info("HistoricalDBConnector initialised — url=%s", self._url.split("@")[-1] if "@" in self._url else self._url)
 
     # ------------------------------------------------------------------
     # Context manager protocol
@@ -373,41 +378,27 @@ class HistoricalDBConnector:
     # Private helpers
     # ------------------------------------------------------------------
     @staticmethod
-    def _validate_env() -> dict[str, str]:
-        """
-        Read all required DB env vars and raise EnvironmentError if any are missing.
-        """
-        required = ["DB_HOST", "DB_PORT", "DB_NAME", "DB_USER", "DB_PASSWORD"]
-        env: dict[str, str] = {}
-        missing: list[str] = []
-        for key in required:
-            val = os.environ.get(key)
-            if not val:
-                missing.append(key)
-            else:
-                env[key] = val
+    def _get_db_url() -> str:
+        """Read DB connection string from environment or fall back to default SQLite."""
+        # 1. Direct URL (Preferred)
+        url = os.environ.get("DATABASE_URL")
+        if url:
+            return url
 
-        if missing:
-            raise EnvironmentError(
-                f"Missing required environment variables: {missing}. "
-                "Set them before starting the application."
-            )
-        return env
+        # 2. Individual components
+        host = os.environ.get("DB_HOST")
+        port = os.environ.get("DB_PORT", "5432")
+        db = os.environ.get("DB_NAME")
+        user = os.environ.get("DB_USER")
+        pw = os.environ.get("DB_PASSWORD")
 
-    @staticmethod
-    def _build_engine(env: dict[str, str]):  # type: ignore[return]
-        """Build a SQLAlchemy engine from the validated env dict."""
-        dsn = (
-            f"postgresql+psycopg2://{env['DB_USER']}:{env['DB_PASSWORD']}"
-            f"@{env['DB_HOST']}:{env['DB_PORT']}/{env['DB_NAME']}"
-        )
-        return create_engine(
-            dsn,
-            pool_size=5,
-            max_overflow=10,
-            pool_pre_ping=True,  # Detect stale connections before use
-            echo=False,
-        )
+        if all([host, db, user, pw]):
+            return f"postgresql+psycopg2://{user}:{pw}@{host}:{port}/{db}"
+
+        # 3. Development Fallback
+        default_sqlite = "sqlite:///./agri.db"
+        logger.warning("Missing DB env vars; falling back to %s", default_sqlite)
+        return default_sqlite
 
 
 if __name__ == "__main__":

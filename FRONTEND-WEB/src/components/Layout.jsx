@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, Outlet } from 'react-router-dom';
 import {
   LayoutDashboard, Tractor, CloudSun, Lightbulb, Bell,
-  Menu, X, Leaf, Globe, LogOut, Check,
+  Menu, X, Leaf, Globe, LogOut, Check, Bug, Activity
 } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -95,6 +95,10 @@ function SidebarContent({ onClose }) {
     { to: '/weather', icon: CloudSun, label: t('nav.weather') },
     { to: '/insights', icon: Lightbulb, label: t('nav.insights') },
     { to: '/alerts', icon: Bell, label: t('nav.alerts') },
+    { to: '/yield', icon: Leaf, label: t('page.yield') || 'Yield History' },
+    { to: '/soil', icon: Activity, label: t('page.soil') || 'Soil Health' },
+    { to: '/pest-detect', icon: Bug, label: t('page.pest_detection') || 'Pest Detection' },
+    { to: '/health', icon: Check, label: t('page.system_health') || 'System Health' },
   ];
 
   return (
@@ -169,8 +173,8 @@ export default function Layout({ children }) {
   const NAV_ITEMS_MOBILE = [
     { to: '/', icon: LayoutDashboard, label: t('nav.dashboard') },
     { to: '/farms', icon: Tractor, label: t('nav.farms') },
-    { to: '/weather', icon: CloudSun, label: t('nav.weather') },
-    { to: '/insights', icon: Lightbulb, label: t('nav.insights') },
+    { to: '/soil', icon: Activity, label: t('page.soil') || 'Soil' },
+    { to: '/pest-detect', icon: Bug, label: t('page.pest_detection') || 'Pest' },
     { to: '/alerts', icon: Bell, label: t('nav.alerts') },
   ];
 
@@ -225,7 +229,7 @@ export default function Layout({ children }) {
 
         {/* Scrollable Content */}
         <main className="flex-1 overflow-y-auto scrollbar-thin p-4 md:p-6 pb-24 md:pb-6">
-          {children}
+          {children || <Outlet />}
         </main>
       </div>
 

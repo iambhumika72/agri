@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Tractor, MapPin, Phone, Leaf, Droplets, AlertTriangle, ChevronRight } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 import { useFarms } from '../hooks/useFarms';
 
 function getMoistureClass(m) {
@@ -13,10 +14,11 @@ export default function FarmsListPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-bold text-neutral-800">All Farms</h1>
-        <p className="text-sm text-neutral-400 mt-0.5">Click any farm to view detailed analytics</p>
-      </div>
+      <PageHeader 
+        titleKey="page.farms.title" 
+        descKey="page.farms.desc" 
+        icon={Tractor} 
+      />
 
       {error && (
         <div className="card border-danger-200 bg-danger-50 flex items-center gap-3 text-danger-500">

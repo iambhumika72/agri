@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   ArrowLeft, Phone, MapPin, Crop, Ruler, Activity,
   Bug, CloudRain, AlertTriangle, Leaf
@@ -48,7 +48,8 @@ function DroughtBar({ score }) {
 }
 
 export default function FarmDetail() {
-  const [farmId, setFarmId] = useState('');
+  const { farmId: urlFarmId } = useParams();
+  const [farmId, setFarmId] = useState(urlFarmId || '');
   const [activeTab, setActiveTab] = useState('Overview');
   const [severityFilter, setSeverityFilter] = useState('all');
   
@@ -57,6 +58,12 @@ export default function FarmDetail() {
   const [soil, setSoil] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (urlFarmId) {
+      setFarmId(urlFarmId);
+    }
+  }, [urlFarmId]);
 
   const fetchFarmData = async () => {
     if (!farmId) return;
@@ -95,16 +102,16 @@ export default function FarmDetail() {
     <div className="max-w-7xl mx-auto space-y-5 pb-24 md:pb-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <PageHeader 
-          titleKey="page.farms.title" 
-          descKey="page.farms.desc" 
+          titleKey="Farm Details" 
+          descKey="Detailed analysis and history for this farm." 
           icon={Leaf} 
         />
         <FarmSelector value={farmId} onChange={setFarmId} />
       </div>
 
-      <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-700">
+      <Link to="/farms" className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-700">
         <ArrowLeft size={15} />
-        Dashboard
+        Back to All Farms
       </Link>
 
       {!farmId && (
