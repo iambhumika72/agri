@@ -14,6 +14,10 @@ from __future__ import annotations
 import logging
 import os
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,6 +26,7 @@ from fastapi.responses import JSONResponse
 # Route imports
 from .routes import health, forecast, alerts, recommendations
 from .routes.farmer_input import router as farmer_input_router
+from . import historical_db_routes
 from ingestion.farmer_input_ingestion import init_db
 
 # Configure logging
@@ -88,6 +93,7 @@ def create_app() -> FastAPI:
     app.include_router(alerts.router)
     app.include_router(recommendations.router)
     app.include_router(farmer_input_router)
+    app.include_router(historical_db_routes.router)
 
     # ── Global exception handlers ─────────────────────────────────────────
 

@@ -1,8 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import client from '../api/client';
-
 const AuthContext = createContext(null);
 const TOKEN_KEY = 'krishi_token';
 const USER_KEY = 'krishi_user';
@@ -16,8 +14,7 @@ export function AuthProvider({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) client.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    else delete client.defaults.headers.common['Authorization'];
+    // client.ts now dynamically reads the token from localStorage per request.
   }, [token]);
 
   const login = useCallback(async (name, phone) => {

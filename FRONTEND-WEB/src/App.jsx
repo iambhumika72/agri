@@ -11,7 +11,11 @@ import AlertsPage from './pages/AlertsPage';
 import LoginPage from './pages/LoginPage';
 import LanguageSelectPage from './pages/LanguageSelectPage';
 import OnboardingPage from './pages/OnboardingPage';
-
+import YieldHistoryPage from './pages/YieldHistoryPage';
+import SoilHealthPage from './pages/SoilHealthPage';
+import PestHistoryPage from './pages/PestHistoryPage';
+import SystemHealthPage from './pages/SystemHealthPage';
+import PestDetectionPage from './pages/PestDetectionPage';
 /** Wraps route outlet with a fadeIn animation keyed to pathname */
 import { useEffect } from 'react';
 
@@ -56,6 +60,11 @@ function AnimatedRoutes() {
                   <Route path="/weather" element={<WeatherPage />} />
                   <Route path="/insights" element={<InsightsPage />} />
                   <Route path="/alerts" element={<AlertsPage />} />
+                  <Route path="/yield" element={<YieldHistoryPage />} />
+                  <Route path="/soil" element={<SoilHealthPage />} />
+                  <Route path="/pest-history" element={<PestHistoryPage />} />
+                  <Route path="/health" element={<SystemHealthPage />} />
+                  <Route path="/pest-detect" element={<PestDetectionPage />} />
                   <Route
                     path="*"
                     element={

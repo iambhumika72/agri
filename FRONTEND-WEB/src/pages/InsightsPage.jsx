@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Lightbulb, CheckCircle, XCircle, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useInsights, useModelStatus } from '../hooks/useInsights';
 import InsightCard from '../components/InsightCard';
 import SMSPreview from '../components/SMSPreview';
-import { sendInsightSMS } from '../api/insights';
 import PageHeader from '../components/PageHeader';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorBanner from '../components/ErrorBanner';
+import { insightsAPI } from '../api/client';
 
 const CATEGORIES = ['All', 'Irrigation', 'Pest', 'Yield', 'Weather'];
 const PAGE_SIZE = 10;
@@ -60,12 +61,35 @@ export default function InsightsPage() {
   const [page, setPage] = useState(1);
   const [smsFarm, setSMSFarm] = useState(null);
 
-  const filters = category !== 'All' ? { category } : {};
-  const { data: insights, isLoading, error } = useInsights(filters);
-  const { data: modelStatus } = useModelStatus();
+  const [insights, setInsights] = useState([]);
+  const [modelStatus, setModelStatus] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const paginated = insights ? insights.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE) : [];
-  const totalPages = insights ? Math.ceil(insights.length / PAGE_SIZE) : 1;
+  const fetchInsights = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const filters = category !== 'All' ? { category } : {};
+      const [insightsData, statusData] = await Promise.all([
+        insightsAPI.getInsights(filters),
+        insightsAPI.getModelStatus()
+      ]);
+      setInsights(insightsData || []);
+      setModelStatus(statusData);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchInsights();
+  }, [category]);
+
+  const paginated = insights.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(insights.length / PAGE_SIZE));
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 pb-24 md:pb-8">
@@ -83,7 +107,6 @@ export default function InsightsPage() {
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
-            id={`insight-filter-${cat.toLowerCase()}`}
             onClick={() => { setCategory(cat); setPage(1); }}
             className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
               category === cat
@@ -94,32 +117,19 @@ export default function InsightsPage() {
             {cat}
           </button>
         ))}
-        {insights && (
+        {insights.length > 0 && (
           <span className="ml-auto text-xs text-neutral-400">
             {insights.length} result{insights.length !== 1 ? 's' : ''}
           </span>
         )}
       </div>
 
-      {/* Error */}
-      {error && (
-        <div className="card border-danger-200 bg-danger-50 flex items-center gap-3 text-danger-500">
-          <AlertCircle size={18} />
-          <p className="text-sm">{error.message}</p>
-        </div>
-      )}
+      {error && <ErrorBanner message={error} onRetry={fetchInsights} />}
 
-      {/* Loading */}
-      {isLoading && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="card animate-pulse h-24 bg-neutral-100" />
-          ))}
-        </div>
-      )}
+      {loading && <LoadingSpinner message="Loading insights..." />}
 
       {/* Insights Grid */}
-      {!isLoading && paginated.length > 0 && (
+      {!loading && paginated.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {paginated.map((insight) => (
             <InsightCard
@@ -131,7 +141,7 @@ export default function InsightsPage() {
         </div>
       )}
 
-      {!isLoading && paginated.length === 0 && (
+      {!loading && !error && paginated.length === 0 && (
         <div className="card flex flex-col items-center justify-center py-16 text-neutral-400 gap-3">
           <Lightbulb size={32} />
           <p className="text-sm">No insights found for the selected filter.</p>
@@ -145,7 +155,6 @@ export default function InsightsPage() {
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
             className="btn-secondary flex items-center gap-1 py-1.5 disabled:opacity-40"
-            id="insights-prev"
           >
             <ChevronLeft size={14} /> Previous
           </button>
@@ -156,7 +165,6 @@ export default function InsightsPage() {
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
             className="btn-secondary flex items-center gap-1 py-1.5 disabled:opacity-40"
-            id="insights-next"
           >
             Next <ChevronRight size={14} />
           </button>
@@ -169,7 +177,8 @@ export default function InsightsPage() {
           message={smsFarm.sms_template}
           farmName={smsFarm.farm_name}
           onConfirm={async (msg) => {
-            await sendInsightSMS(smsFarm.id, smsFarm.farm_id);
+            alert('SMS sent (mock)');
+            setSMSFarm(null);
           }}
           onClose={() => setSMSFarm(null)}
         />
